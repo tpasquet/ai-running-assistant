@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv ARCHITECTURE.md .claude/specs/)",
+      "Bash(git mv AGENTS.md .claude/specs/)",
+      "Bash(git mv DATA_MODEL.md .claude/specs/)",
+      "Bash(git mv ITERATION_1.md .claude/specs/)",
+      "Bash(mv ARCHITECTURE.md .claude/specs/)",
+      "Bash(mv AGENTS.md .claude/specs/)",
+      "Bash(mv DATA_MODEL.md .claude/specs/)",
+      "Bash(mv ITERATION_1.md .claude/specs/)",
+      "Read(//c/sources/stravaExport/exports/split/**)",
+      "Bash(npm install @langchain/core @langchain/openai langchain langgraph @langchain/community)",
+      "Bash(npm install @langchain/core @langchain/openai langchain langgraph @langchain/community zod)",
+      "Bash(npm install --legacy-peer-deps @langchain/core @langchain/openai langchain langgraph @langchain/community zod)",
+      "Bash(npm install --legacy-peer-deps @langchain/core @langchain/openai @langchain/langgraph @langchain/community langchain zod)",
+      "Bash(npm run dev)",
+      "Bash(npm install fastify @fastify/cors)",
+      "Bash(npm install --legacy-peer-deps fastify @fastify/cors)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
