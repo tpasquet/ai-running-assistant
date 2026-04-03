@@ -11,3 +11,51 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id          String       @id @default(cuid())
+  stravaId    Int          @unique
+  username    String
+  createdAt   DateTime     @default(now())
+  stravaToken StravaToken?
+  activities  Activity[]
+}
+
+model StravaToken {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessTokenEnc  String
+  refreshTokenEnc String
+  expiresAt       DateTime
+  scope           String
+  updatedAt       DateTime @updatedAt
+}
+
+model Activity {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stravaId            BigInt   @unique
+  type                String
+  startDate           DateTime
+  distanceM           Float
+  movingTimeSec       Int
+  elapsedTimeSec      Int
+  totalElevationGainM Float
+  averageSpeedMS      Float
+  maxSpeedMS          Float
+  avgPaceSecKm        Float
+  avgHrBpm            Int?
+  maxHrBpm            Int?
+  calories            Float?
+  avgCadence          Float?
+  avgTemp             Float?
+  perceivedEffort     Int?
+  tss                 Float?
+  polyline            String?
+  gearId              String?
+  createdAt           DateTime @default(now())
+
+  @@index([userId, startDate])
+}
