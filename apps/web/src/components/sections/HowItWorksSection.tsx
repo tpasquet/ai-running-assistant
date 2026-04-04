@@ -1,0 +1,61 @@
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { SectionWrapper } from "@/components/shared/SectionWrapper";
+
+const steps = [
+  {
+    number: "01",
+    title: "Connectez Strava",
+    description: "Autorisez RunCoach AI à accéder à vos activités Strava en un clic. Vos 90 derniers jours sont importés automatiquement.",
+  },
+  {
+    number: "02",
+    title: "L'IA analyse vos données",
+    description: "Nos trois agents spécialisés calculent votre charge d'entraînement, détectent les risques et évaluent votre état de forme.",
+  },
+  {
+    number: "03",
+    title: "Recevez vos recommandations",
+    description: "Chaque jour, une recommandation personnalisée : séance à réaliser, conseils de récupération, alertes de surmenage.",
+  },
+];
+
+export function HowItWorksSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <SectionWrapper id="how-it-works">
+      <div ref={ref} className="space-y-12">
+        <div className="text-center">
+          <h2 className="font-display text-3xl font-bold text-foreground sm:text-4xl">
+            Comment ça marche ?
+          </h2>
+        </div>
+
+        <div className="relative flex flex-col gap-8 lg:flex-row lg:gap-0">
+          {/* Connector line (desktop only) */}
+          <div className="absolute left-0 right-0 top-8 hidden border-t border-dashed border-border lg:block" />
+
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.number}
+              className="relative flex flex-1 flex-col items-center text-center lg:px-8"
+              initial={{ opacity: 0, y: 24 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+            >
+              <div className="relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-background font-display text-xl font-bold text-primary">
+                {step.number}
+              </div>
+              <h3 className="mb-3 font-display text-lg font-bold text-foreground">
+                {step.title}
+              </h3>
+              <p className="text-sm text-muted leading-relaxed">{step.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+}
