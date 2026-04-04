@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.0.0",
     "lucide-react": "^0.469.0",
     "react": "^19.0.0",
