@@ -6,13 +6,26 @@ export default defineConfig({
     environment: "node",
     coverage: {
       provider: "v8",
-      reporter: ["text", "json", "html"],
+      reporter: ["text", "lcov"],
       exclude: [
         "node_modules/**",
         "dist/**",
         "**/*.test.ts",
         "**/__tests__/**",
+        "**/tools/**",
+        "**/nodes/**",
+        "**/mocks/**",
+        "**/api/**",
+        "**/types/**",
+        "src/index.ts",
+        "vitest.config.ts",
       ],
+      thresholds: {
+        lines: 70,
+        functions: 40,
+        branches: 70,
+        statements: 70,
+      },
     },
   },
 });
