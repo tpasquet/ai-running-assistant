@@ -53,6 +53,11 @@ export async function createServer() {
     status: "ok",
   }));
 
+  // Health check for Railway
+  app.get("/health", async (req, reply) => {
+    return { status: "ok" };
+  });
+
   return app;
 }
 
