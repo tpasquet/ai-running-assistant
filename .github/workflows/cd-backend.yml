@@ -25,6 +25,7 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
+        # --detach: fire-and-forget — GHA job exits immediately, Railway deploys async
         run: railway up --service api --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
