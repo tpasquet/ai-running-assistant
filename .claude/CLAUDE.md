@@ -77,6 +77,7 @@ src/
 | specs/ARCHITECTURE.md | Components and data flow overview |
 | specs/AGENTS.md | AI agents definition, router, structured outputs |
 | specs/DATA_MODEL.md | Complete database schema |
+| specs/AUTH.md | Authentication — email/pwd, Google, Apple, Strava (données) |
 
 ### Development Roadmap (`.claude/roadmap/`)
 

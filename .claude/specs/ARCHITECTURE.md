@@ -11,6 +11,7 @@
 ┌──────────────────────────▼──────────────────────────────────────┐
 │                      API LAYER (Fastify)                        │
 │                                                                 │
+│   /auth/login       /auth/google/*   /auth/apple/*              │
 │   /auth/strava/*    /activities/*    /aggregations/*            │
 │   /feedback/*       /goals/*         /ai/*                      │
 │                                                                 │
@@ -224,8 +225,12 @@ services:
 
 ## Security
 
+- **Identity providers**: Google, Apple, email/pwd — voir `specs/AUTH.md`
+- **Strava**: intégration données uniquement (≠ provider d'identité)
+- **Passwords**: bcrypt cost 12
 - **Strava Tokens**: encrypted AES-256-GCM in database, key in environment variable
-- **JWT**: HS256, 7 day expiry, refresh via `/auth/refresh`
+- **JWT**: HS256, 7 day expiry, `httpOnly` cookie, refresh via `/auth/refresh`
+- **OAuth PKCE**: obligatoire pour Google et Apple (mitigation CSRF)
 - **Strava Webhook**: verification `hub.verify_token` + HMAC signature on each event
 - **Rate limiting**: 20 req/min on `/ai/*`, 100 req/min global per IP
 - **Validation**: all API inputs validated by Zod before processing
