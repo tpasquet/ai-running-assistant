@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -13,12 +8,15 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(cuid())
-  stravaId    Int          @unique
-  username    String
-  createdAt   DateTime     @default(now())
-  stravaToken StravaToken?
-  activities  Activity[]
+  id             String          @id @default(cuid())
+  stravaId       Int             @unique
+  username       String
+  createdAt      DateTime        @default(now())
+  stravaToken    StravaToken?
+  activities     Activity[]
+  weeklyAggs     WeeklyAggregate[]
+  dailyFeedbacks DailyFeedback[]
+  goals          Goal[]
 }
 
 model StravaToken {
@@ -58,4 +56,63 @@ model Activity {
   createdAt           DateTime @default(now())
 
   @@index([userId, startDate])
+}
+
+model WeeklyAggregate {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart           DateTime
+  weekNumber          Int
+  year                Int
+  totalDistanceM      Float    @default(0)
+  totalDurationSec    Int      @default(0)
+  totalElevationM     Float    @default(0)
+  sessionCount        Int      @default(0)
+  runCount            Int      @default(0)
+  totalTss            Float    @default(0)
+  ctl                 Float    @default(0)
+  atl                 Float    @default(0)
+  tsb                 Float    @default(0)
+  monotony            Float    @default(0)
+  strain              Float    @default(0)
+  avgPerceivedEffort  Float?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([userId, weekStart])
+  @@index([userId, weekStart])
+}
+
+model DailyFeedback {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date           DateTime @db.Date
+  fatigue        Int
+  muscleSoreness Int
+  mood           Int
+  sleepQuality   Int
+  painLocations  Json     @default("[]")
+  painIntensity  Int?
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String
+  targetValue Float
+  targetDate  DateTime
+  status      String   @default("ACTIVE")
+  context     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, status])
 }

@@ -3,6 +3,10 @@ import cors from "@fastify/cors";
 import { aiRoutes } from "./routes/ai.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { webhookRoutes } from "./routes/webhook.routes.js";
+import { activityRoutes } from "./routes/activity.routes.js";
+import { aggregationRoutes } from "./routes/aggregation.routes.js";
+import { feedbackRoutes } from "./routes/feedback.routes.js";
+import { goalRoutes } from "./routes/goal.routes.js";
 import { authPlugin } from "./plugins/auth.plugin.js";
 import { StravaOAuth } from "../infra/strava/StravaOAuth.js";
 import { stravaQueue } from "../infra/queue/queues.js";
@@ -37,6 +41,10 @@ export async function createServer() {
     stravaQueue,
     verifyToken: getEnv("STRAVA_WEBHOOK_VERIFY_TOKEN"),
   });
+  await app.register(activityRoutes);
+  await app.register(aggregationRoutes);
+  await app.register(feedbackRoutes);
+  await app.register(goalRoutes);
 
   app.get("/", async () => ({
     name: "RunCoach AI",
