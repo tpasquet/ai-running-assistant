@@ -35,7 +35,7 @@ export async function createServer() {
     encryptionKey: getEnv("ENCRYPTION_KEY"),
   });
 
-  await app.register(aiRoutes, { prefix: "/api" });
+  await app.register(aiRoutes);
   await app.register(authRoutes, { oauth, stravaQueue });
   await app.register(webhookRoutes, {
     stravaQueue,
@@ -49,7 +49,7 @@ export async function createServer() {
   app.get("/", async () => ({
     name: "RunCoach AI",
     version: "0.1.0",
-    iteration: 2,
+    iteration: 3,
     status: "ok",
   }));
 
