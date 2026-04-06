@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id @default(cuid())
+  stravaId       Int             @unique
+  username       String
+  createdAt      DateTime        @default(now())
+  stravaToken    StravaToken?
+  activities     Activity[]
+  weeklyAggs     WeeklyAggregate[]
+  dailyFeedbacks DailyFeedback[]
+  goals          Goal[]
+}
+
+model StravaToken {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessTokenEnc  String
+  refreshTokenEnc String
+  expiresAt       DateTime
+  scope           String
+  updatedAt       DateTime @updatedAt
+}
+
+model Activity {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stravaId            BigInt   @unique
+  type                String
+  startDate           DateTime
+  distanceM           Float
+  movingTimeSec       Int
+  elapsedTimeSec      Int
+  totalElevationGainM Float
+  averageSpeedMS      Float
+  maxSpeedMS          Float
+  avgPaceSecKm        Float
+  avgHrBpm            Int?
+  maxHrBpm            Int?
+  calories            Float?
+  avgCadence          Float?
+  avgTemp             Float?
+  perceivedEffort     Int?
+  tss                 Float?
+  polyline            String?
+  gearId              String?
+  createdAt           DateTime @default(now())
+
+  @@index([userId, startDate])
+}
+
+model WeeklyAggregate {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart           DateTime
+  weekNumber          Int
+  year                Int
+  totalDistanceM      Float    @default(0)
+  totalDurationSec    Int      @default(0)
+  totalElevationM     Float    @default(0)
+  sessionCount        Int      @default(0)
+  runCount            Int      @default(0)
+  totalTss            Float    @default(0)
+  ctl                 Float    @default(0)
+  atl                 Float    @default(0)
+  tsb                 Float    @default(0)
+  monotony            Float    @default(0)
+  strain              Float    @default(0)
+  avgPerceivedEffort  Float?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([userId, weekStart])
+  @@index([userId, weekStart])
+}
+
+model DailyFeedback {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date           DateTime @db.Date
+  fatigue        Int
+  muscleSoreness Int
+  mood           Int
+  sleepQuality   Int
+  painLocations  Json     @default("[]")
+  painIntensity  Int?
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type        String
+  targetValue Float
+  targetDate  DateTime
+  status      String   @default("ACTIVE")
+  context     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, status])
+}
