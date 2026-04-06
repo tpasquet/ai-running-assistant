@@ -8,6 +8,7 @@ import { aggregationRoutes } from "./routes/aggregation.routes.js";
 import { feedbackRoutes } from "./routes/feedback.routes.js";
 import { goalRoutes } from "./routes/goal.routes.js";
 import { authPlugin } from "./plugins/auth.plugin.js";
+import { devRoutes } from "./routes/dev.routes.js";
 import { StravaOAuth } from "../infra/strava/StravaOAuth.js";
 import { stravaQueue } from "../infra/queue/queues.js";
 import { prisma } from "../infra/db/prisma.js";
@@ -29,11 +30,14 @@ export async function createServer() {
     jwtSecret: getEnv("JWT_SECRET"),
   });
 
-  const oauth = new StravaOAuth(prisma, {
-    clientId: getEnv("STRAVA_CLIENT_ID"),
-    clientSecret: getEnv("STRAVA_CLIENT_SECRET"),
-    encryptionKey: getEnv("ENCRYPTION_KEY"),
-  });
+  const stravaEnabled = !!(process.env.STRAVA_CLIENT_ID && process.env.STRAVA_CLIENT_SECRET);
+  const oauth = stravaEnabled
+    ? new StravaOAuth(prisma, {
+        clientId: process.env.STRAVA_CLIENT_ID!,
+        clientSecret: process.env.STRAVA_CLIENT_SECRET!,
+        encryptionKey: getEnv("ENCRYPTION_KEY"),
+      })
+    : null;
 
   await app.register(aiRoutes);
   await app.register(authRoutes, { oauth, stravaQueue });
@@ -45,6 +49,10 @@ export async function createServer() {
   await app.register(aggregationRoutes);
   await app.register(feedbackRoutes);
   await app.register(goalRoutes);
+
+  if (process.env.NODE_ENV === "development") {
+    await app.register(devRoutes);
+  }
 
   app.get("/", async () => ({
     name: "RunCoach AI",

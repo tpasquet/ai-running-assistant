@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { StravaOAuth } from "../../infra/strava/StravaOAuth.js";
 
 interface AuthRoutesOptions {
-  oauth: StravaOAuth;
+  oauth: StravaOAuth | null;
   stravaQueue: Queue;
 }
 
@@ -20,12 +20,14 @@ export const authRoutes: FastifyPluginAsync<AuthRoutesOptions> = async (
   const { oauth, stravaQueue } = opts;
 
   app.get("/auth/strava/login", async (req, reply) => {
+    if (!oauth) return reply.code(503).send({ error: "Strava integration not configured" });
     const redirectUri = `${req.protocol}://${req.hostname}/auth/strava/callback`;
     const url = oauth.getAuthorizationUrl(redirectUri);
     return reply.redirect(url);
   });
 
   app.get("/auth/strava/callback", async (req, reply) => {
+    if (!oauth) return reply.code(503).send({ error: "Strava integration not configured" });
     const result = CallbackQuerySchema.safeParse(req.query);
     if (!result.success) {
       return reply.code(400).send({ error: "Missing required query param: code" });

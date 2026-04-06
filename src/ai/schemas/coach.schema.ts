@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-/**
- * Coach agent output schema
- */
 export const CoachOutputSchema = z.object({
   recommendation: z
     .string()
@@ -30,13 +27,13 @@ export const CoachOutputSchema = z.object({
         "recovery",
         "rest",
       ]),
-      durationMin: z.number().optional(),
-      distanceKm: z.number().optional(),
-      targetPaceSecKm: z.number().optional(),
-      notes: z.string().optional(),
+      durationMin: z.number().nullable().describe("Duration in minutes, or null"),
+      distanceKm: z.number().nullable().describe("Distance in km, or null"),
+      targetPaceSecKm: z.number().nullable().describe("Target pace sec/km, or null"),
+      notes: z.string().nullable().describe("Additional notes, or null"),
     })
-    .optional()
-    .describe("Specific session suggestion if applicable"),
+    .nullable()
+    .describe("Specific session suggestion if applicable, or null"),
 });
 
 export type CoachOutput = z.infer<typeof CoachOutputSchema>;

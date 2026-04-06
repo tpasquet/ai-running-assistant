@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-/**
- * Router output schema - structured classification result
- */
 export const RouterOutputSchema = z.object({
   agents: z
     .array(z.enum(["coach", "physio", "mental"]))
@@ -28,7 +25,6 @@ export const RouterOutputSchema = z.object({
 
   reasoning: z
     .string()
-    .optional()
     .describe("Brief explanation of routing decision"),
 });
 
