@@ -20,6 +20,10 @@ const steps = [
   },
 ];
 
+// Unsplash — free to use. Runner on road, motion blur
+const ILLUSTRATION_URL =
+  "https://plus.unsplash.com/premium_photo-1674605365723-15e6749630f4?auto=format&fit=crop&w=1200&q=80";
+
 export function HowItWorksSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -45,7 +49,8 @@ export function HowItWorksSection() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.15 }}
             >
-              <div className="relative z-10 mb-6 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-background font-display text-xl font-bold text-primary">
+              {/* Pill step number — matches Figma */}
+              <div className="relative z-10 mb-6 flex h-14 w-8 items-center justify-center rounded-full border-2 border-primary bg-background font-display text-xs font-bold text-primary">
                 {step.number}
               </div>
               <h3 className="mb-3 font-display text-lg font-bold text-foreground">
@@ -55,6 +60,28 @@ export function HowItWorksSection() {
             </motion.div>
           ))}
         </div>
+
+        {/* Photo illustration */}
+        <motion.div
+          className="relative mt-8 overflow-hidden rounded-2xl"
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.7, delay: 0.5 }}
+        >
+          <img
+            src={ILLUSTRATION_URL}
+            alt="Coureurs sur route"
+            className="h-56 w-full object-cover object-center sm:h-72 lg:h-80"
+          />
+          {/* Orange tint overlay */}
+          <div className="absolute inset-0 bg-primary/20" />
+          {/* Tagline overlay */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <p className="font-display text-xl font-bold text-white drop-shadow-lg sm:text-2xl lg:text-3xl">
+              Chaque foulée compte.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </SectionWrapper>
   );

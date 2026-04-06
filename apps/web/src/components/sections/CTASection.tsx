@@ -67,7 +67,7 @@ export function CTASection() {
                 <p
                   id="email-error"
                   role="alert"
-                  className="mt-1 text-left text-xs text-red-400"
+                  className="mt-1 text-left text-xs text-red-600"
                 >
                   {error}
                 </p>
