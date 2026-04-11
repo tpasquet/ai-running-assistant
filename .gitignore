@@ -31,6 +31,9 @@ Thumbs.db
 prisma/dev.db
 prisma/dev.db-journal
 
+# Strava fixtures (données personnelles — ne pas committer)
+prisma/fixtures/strava/*.json
+
 # Testing
 coverage/
 
