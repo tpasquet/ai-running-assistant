@@ -21,6 +21,23 @@ export interface StravaActivity {
   gear_id?: string;
 }
 
+export interface StravaLap {
+  id: number;
+  lap_index: number;
+  name?: string;
+  distance: number;
+  moving_time: number;
+  elapsed_time: number;
+  average_speed: number;
+  max_speed: number;
+  average_heartrate?: number;
+  max_heartrate?: number;
+  average_cadence?: number;
+  total_elevation_gain: number;
+  pace_zone?: number;
+  start_date: string;
+}
+
 export class StravaClient {
   constructor(private readonly accessToken: string) {}
 
@@ -60,6 +77,12 @@ export class StravaClient {
   async getActivity(stravaId: number): Promise<StravaActivity> {
     return this.request<StravaActivity>(
       `${STRAVA_BASE}/activities/${stravaId}`
+    );
+  }
+
+  async getLaps(stravaActivityId: number): Promise<StravaLap[]> {
+    return this.request<StravaLap[]>(
+      `${STRAVA_BASE}/activities/${stravaActivityId}/laps`
     );
   }
 }

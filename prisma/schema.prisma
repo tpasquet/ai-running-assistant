@@ -95,8 +95,33 @@ model Activity {
   polyline            String?
   gearId              String?
   createdAt           DateTime @default(now())
+  laps                Lap[]
 
   @@index([userId, startDate])
+}
+
+model Lap {
+  id                  String   @id @default(cuid())
+  activityId          String
+  activity            Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  lapIndex            Int
+  name                String?
+  distanceM           Float
+  movingTimeSec       Int
+  elapsedTimeSec      Int
+  avgSpeedMS          Float
+  maxSpeedMS          Float
+  avgPaceSecKm        Float
+  avgHrBpm            Int?
+  maxHrBpm            Int?
+  avgCadence          Float?
+  totalElevationGainM Float
+  paceZone            Int?     // Strava pace zone: 0=none, 1-5=zones
+  startDate           DateTime
+  createdAt           DateTime @default(now())
+
+  @@unique([activityId, lapIndex])
+  @@index([activityId])
 }
 
 model WeeklyAggregate {

@@ -16,7 +16,9 @@
       "Bash(npm install --legacy-peer-deps @langchain/core @langchain/openai @langchain/langgraph @langchain/community langchain zod)",
       "Bash(npm run dev)",
       "Bash(npm install fastify @fastify/cors)",
-      "Bash(npm install --legacy-peer-deps fastify @fastify/cors)"
+      "Bash(npm install --legacy-peer-deps fastify @fastify/cors)",
+      "Bash(git checkout:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []

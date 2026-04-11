@@ -40,14 +40,16 @@ describe("ActivityRepository", () => {
       gearId: null,
     };
 
-    mockPrisma.activity.upsert.mockResolvedValue({ id: "act-1", createdAt: new Date(), ...activity });
+    mockPrisma.activity.upsert.mockResolvedValue({ id: "act-1" });
 
-    await repo.upsert(activity);
+    const result = await repo.upsert(activity);
 
+    expect(result).toEqual({ id: "act-1" });
     expect(mockPrisma.activity.upsert).toHaveBeenCalledWith({
       where: { stravaId: BigInt(123456) },
       create: { ...activity },
       update: expect.objectContaining({ distanceM: 10000 }),
+      select: { id: true },
     });
   });
 

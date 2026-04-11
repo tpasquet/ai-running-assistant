@@ -74,6 +74,16 @@ export interface Activity {
   gearId: string | null;       // gear_id from Strava
 }
 
+export interface LapSummary {
+  lapIndex: number;
+  distanceM: number;
+  movingTimeSec: number;
+  avgPaceSecKm: number;
+  avgHrBpm: number | null;
+  maxHrBpm: number | null;
+  paceZone: number | null; // 0=no zone, 1-5=Strava zones
+}
+
 export interface ActivitySummary {
   id: string;
   date: string;
@@ -82,6 +92,7 @@ export interface ActivitySummary {
   avgPaceSecKm: number;
   tss: number | null;
   perceivedEffort: number | null;
+  laps: LapSummary[]; // empty if not yet fetched
 }
 
 export interface WeeklyAggregate {

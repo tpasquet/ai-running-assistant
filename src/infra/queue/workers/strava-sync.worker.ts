@@ -5,6 +5,7 @@ import { prisma } from "../../db/prisma.js";
 import { StravaClient } from "../../strava/StravaClient.js";
 import { StravaSync } from "../../strava/StravaSync.js";
 import { ActivityRepository } from "../../db/repositories/ActivityRepository.js";
+import { LapRepository } from "../../db/repositories/LapRepository.js";
 import type { StravaOAuth } from "../../strava/StravaOAuth.js";
 import type { StravaSyncJobData } from "../queues.js";
 
@@ -33,13 +34,14 @@ export async function processStravaJob(
  */
 export function startWorker(oauth: StravaOAuth): Worker {
   const repo = new ActivityRepository(prisma);
+  const lapRepo = new LapRepository();
 
   return new Worker<StravaSyncJobData>(
     "strava-sync",
     async (job) => {
       await processStravaJob(job, oauth, (token) => {
         const client = new StravaClient(token);
-        return new StravaSync(client, repo);
+        return new StravaSync(client, repo, lapRepo);
       });
     },
     { connection: redis, concurrency: 1 }

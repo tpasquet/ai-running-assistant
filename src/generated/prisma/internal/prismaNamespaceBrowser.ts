@@ -56,6 +56,7 @@ export const ModelName = {
   PasswordResetToken: 'PasswordResetToken',
   StravaToken: 'StravaToken',
   Activity: 'Activity',
+  Lap: 'Lap',
   WeeklyAggregate: 'WeeklyAggregate',
   DailyFeedback: 'DailyFeedback',
   Goal: 'Goal'
@@ -155,6 +156,29 @@ export const ActivityScalarFieldEnum = {
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
+
+
+export const LapScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  lapIndex: 'lapIndex',
+  name: 'name',
+  distanceM: 'distanceM',
+  movingTimeSec: 'movingTimeSec',
+  elapsedTimeSec: 'elapsedTimeSec',
+  avgSpeedMS: 'avgSpeedMS',
+  maxSpeedMS: 'maxSpeedMS',
+  avgPaceSecKm: 'avgPaceSecKm',
+  avgHrBpm: 'avgHrBpm',
+  maxHrBpm: 'maxHrBpm',
+  avgCadence: 'avgCadence',
+  totalElevationGainM: 'totalElevationGainM',
+  paceZone: 'paceZone',
+  startDate: 'startDate',
+  createdAt: 'createdAt'
+} as const
+
+export type LapScalarFieldEnum = (typeof LapScalarFieldEnum)[keyof typeof LapScalarFieldEnum]
 
 
 export const WeeklyAggregateScalarFieldEnum = {

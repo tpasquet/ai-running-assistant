@@ -43,6 +43,11 @@ export type StravaToken = Prisma.StravaTokenModel
  */
 export type Activity = Prisma.ActivityModel
 /**
+ * Model Lap
+ * 
+ */
+export type Lap = Prisma.LapModel
+/**
  * Model WeeklyAggregate
  * 
  */
