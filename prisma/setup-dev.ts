@@ -14,6 +14,8 @@
 import { readFileSync, readdirSync } from "fs";
 import { join, resolve } from "path";
 import { prisma } from "../src/infra/db/prisma.js";
+import { redis } from "../src/infra/cache/redis.js";
+import { AggregationService } from "../src/domain/aggregation/AggregationService.js";
 import { computeTSSWithHR, computeTSSFromPace } from "../src/domain/activity/tss.js";
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -267,13 +269,22 @@ async function main() {
     }
   }
 
-  console.log(`\n✅ Done!`);
+  console.log(`\n✅ Import done!`);
   console.log(`   User ID:             ${user.id}`);
   console.log(`   Activities imported: ${importedActivities}`);
   console.log(`   Laps imported:       ${importedLaps}`);
   if (errors > 0) console.log(`   Errors:              ${errors}`);
+
+  // 3. Recompute weekly aggregates (CTL/ATL/TSB)
+  if (importedActivities > 0) {
+    console.log(`\n⚙️  Computing weekly aggregates (CTL/ATL/TSB)...`);
+    const aggregationService = new AggregationService(prisma, redis);
+    await aggregationService.recalculateAll(user.id);
+    const weekCount = await prisma.weeklyAggregate.count({ where: { userId: user.id } });
+    console.log(`   Weekly aggregates:   ${weekCount} weeks computed`);
+  }
 }
 
 main()
   .catch((err) => { console.error(err); process.exit(1); })
-  .finally(() => prisma.$disconnect());
+  .finally(async () => { await prisma.$disconnect(); redis.disconnect(); });

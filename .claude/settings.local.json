@@ -18,7 +18,10 @@
       "Bash(npm install fastify @fastify/cors)",
       "Bash(npm install --legacy-peer-deps fastify @fastify/cors)",
       "Bash(git checkout:*)",
-      "Bash(npm test:*)"
+      "Bash(npm test:*)",
+      "Bash(npx vitest:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
     ],
     "deny": [],
     "ask": []

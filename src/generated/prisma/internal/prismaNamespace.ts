@@ -389,6 +389,7 @@ export const ModelName = {
   PasswordResetToken: 'PasswordResetToken',
   StravaToken: 'StravaToken',
   Activity: 'Activity',
+  Lap: 'Lap',
   WeeklyAggregate: 'WeeklyAggregate',
   DailyFeedback: 'DailyFeedback',
   Goal: 'Goal'
@@ -407,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "passwordResetToken" | "stravaToken" | "activity" | "weeklyAggregate" | "dailyFeedback" | "goal"
+    modelProps: "user" | "account" | "passwordResetToken" | "stravaToken" | "activity" | "lap" | "weeklyAggregate" | "dailyFeedback" | "goal"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -781,6 +782,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Lap: {
+      payload: Prisma.$LapPayload<ExtArgs>
+      fields: Prisma.LapFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LapFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LapFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        findFirst: {
+          args: Prisma.LapFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LapFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        findMany: {
+          args: Prisma.LapFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>[]
+        }
+        create: {
+          args: Prisma.LapCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        createMany: {
+          args: Prisma.LapCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LapCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>[]
+        }
+        delete: {
+          args: Prisma.LapDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        update: {
+          args: Prisma.LapUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        deleteMany: {
+          args: Prisma.LapDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LapUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LapUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>[]
+        }
+        upsert: {
+          args: Prisma.LapUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LapPayload>
+        }
+        aggregate: {
+          args: Prisma.LapAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLap>
+        }
+        groupBy: {
+          args: Prisma.LapGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LapGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LapCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LapCountAggregateOutputType> | number
+        }
+      }
+    }
     WeeklyAggregate: {
       payload: Prisma.$WeeklyAggregatePayload<ExtArgs>
       fields: Prisma.WeeklyAggregateFieldRefs
@@ -1098,6 +1173,7 @@ export const ActivityScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   stravaId: 'stravaId',
+  name: 'name',
   type: 'type',
   startDate: 'startDate',
   distanceM: 'distanceM',
@@ -1128,6 +1204,29 @@ export const ActivityScalarFieldEnum = {
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
+
+
+export const LapScalarFieldEnum = {
+  id: 'id',
+  activityId: 'activityId',
+  lapIndex: 'lapIndex',
+  name: 'name',
+  distanceM: 'distanceM',
+  movingTimeSec: 'movingTimeSec',
+  elapsedTimeSec: 'elapsedTimeSec',
+  avgSpeedMS: 'avgSpeedMS',
+  maxSpeedMS: 'maxSpeedMS',
+  avgPaceSecKm: 'avgPaceSecKm',
+  avgHrBpm: 'avgHrBpm',
+  maxHrBpm: 'maxHrBpm',
+  avgCadence: 'avgCadence',
+  totalElevationGainM: 'totalElevationGainM',
+  paceZone: 'paceZone',
+  startDate: 'startDate',
+  createdAt: 'createdAt'
+} as const
+
+export type LapScalarFieldEnum = (typeof LapScalarFieldEnum)[keyof typeof LapScalarFieldEnum]
 
 
 export const WeeklyAggregateScalarFieldEnum = {
@@ -1311,13 +1410,6 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'Json'
  */
 export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -1430,6 +1522,7 @@ export type GlobalOmitConfig = {
   passwordResetToken?: Prisma.PasswordResetTokenOmit
   stravaToken?: Prisma.StravaTokenOmit
   activity?: Prisma.ActivityOmit
+  lap?: Prisma.LapOmit
   weeklyAggregate?: Prisma.WeeklyAggregateOmit
   dailyFeedback?: Prisma.DailyFeedbackOmit
   goal?: Prisma.GoalOmit
