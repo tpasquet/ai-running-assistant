@@ -64,7 +64,8 @@ export const getActivitiesByProfileTool = new DynamicStructuredTool({
     const userId = config?.configurable?.userId;
     if (!userId) return JSON.stringify({ error: "userId not provided" });
 
-    const since = new Date();
+    const now   = new Date();
+    const since = new Date(now);
     since.setDate(since.getDate() - lastDays);
 
     // Pre-filter by distance to reduce fetch size
@@ -85,7 +86,7 @@ export const getActivitiesByProfileTool = new DynamicStructuredTool({
     const activities = await prisma.activity.findMany({
       where: {
         userId,
-        startDate: { gte: since },
+        startDate: { gte: since, lte: now },
         ...(Object.keys(distanceWhere).length > 0 && { distanceM: distanceWhere }),
       },
       orderBy: { startDate: "desc" },

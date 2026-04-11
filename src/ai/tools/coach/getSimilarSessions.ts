@@ -34,6 +34,7 @@ export const getSimilarSessionsTool = new DynamicStructuredTool({
     const activities = await prisma.activity.findMany({
       where: {
         userId,
+        startDate: { lte: new Date() },
         avgPaceSecKm: {
           gte: targetPaceSecKm * (1 - tolerance),
           lte: targetPaceSecKm * (1 + tolerance),

@@ -52,7 +52,7 @@ describe("getTrainingLoadHistoryTool", () => {
 
     expect(prisma.weeklyAggregate.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { userId: "user-abc" },
+        where: expect.objectContaining({ userId: "user-abc" }),
         take:  8,
         orderBy: { weekStart: "desc" },
       })

@@ -25,11 +25,12 @@ export const getPeakWeeksTool = new DynamicStructuredTool({
     const userId = config?.configurable?.userId;
     if (!userId) return JSON.stringify({ error: "userId not provided" });
 
-    const since = new Date();
+    const now   = new Date();
+    const since = new Date(now);
     since.setDate(since.getDate() - lastDays);
 
     const aggs = await prisma.weeklyAggregate.findMany({
-      where:   { userId, weekStart: { gte: since } },
+      where:   { userId, weekStart: { gte: since, lte: now } },
       orderBy: rankBy === "tss"
         ? { totalTss:       "desc" }
         : { totalDistanceM: "desc" },

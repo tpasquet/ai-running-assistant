@@ -28,7 +28,7 @@ export const getTrainingLoadHistoryTool = new DynamicStructuredTool({
     if (!userId) return JSON.stringify({ error: "userId not provided" });
 
     const aggs = await prisma.weeklyAggregate.findMany({
-      where: { userId },
+      where: { userId, weekStart: { lte: new Date() } },
       orderBy: { weekStart: "desc" },
       take: weeks,
       select: {

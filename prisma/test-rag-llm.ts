@@ -4,7 +4,27 @@
  *
  * Usage:
  *   npx tsx --env-file .env prisma/test-rag-llm.ts
+ *
+ * Simulated date: 2025-08-15 — so RAG tools look back from that date,
+ * matching the period when Strava data is available.
  */
+
+// ── Simulate "now" = 2025-08-15 ───────────────────────────────────────────────
+const SIMULATED_NOW = new Date("2025-08-15T12:00:00Z");
+const OriginalDate = Date;
+// @ts-expect-error — intentional global patch for test
+globalThis.Date = class extends OriginalDate {
+  constructor(...args: ConstructorParameters<typeof OriginalDate>) {
+    if (args.length === 0) {
+      super(SIMULATED_NOW.getTime());
+    } else {
+      // @ts-expect-error — spread
+      super(...args);
+    }
+  }
+  static now() { return SIMULATED_NOW.getTime(); }
+};
+// ─────────────────────────────────────────────────────────────────────────────
 
 import { prisma } from "../src/infra/db/prisma.js";
 import { compileCoachingGraph } from "../src/ai/graph/graph.js";
@@ -34,18 +54,38 @@ async function main() {
   }
 
   console.log(`\n👤 User: ${user.email} (${user.id})`);
+  console.log(`📅 Simulated date: ${SIMULATED_NOW.toISOString().split("T")[0]}`);
 
+  // Load context anchored to SIMULATED_NOW: take the WeeklyAggregate whose weekStart
+  // is the most recent one ≤ SIMULATED_NOW, then build a minimal AggregatedContext.
   const aggregationService = new AggregationService(prisma, fakeRedis);
   const context = await aggregationService.getContextWindow(user.id);
 
-  console.log(`\n📊 Context loaded:`);
+  // Override load metrics with values from the simulated date
+  const weekAtDate = await prisma.weeklyAggregate.findFirst({
+    where: { userId: user.id, weekStart: { lte: SIMULATED_NOW } },
+    orderBy: { weekStart: "desc" },
+    select: { ctl: true, atl: true, tsb: true, weekStart: true },
+  });
+  if (weekAtDate) {
+    context.currentCTL = Math.round(weekAtDate.ctl * 10) / 10;
+    context.currentATL = Math.round(weekAtDate.atl * 10) / 10;
+    context.currentTSB = Math.round(weekAtDate.tsb * 10) / 10;
+    context.formStatus = weekAtDate.tsb < -10 ? "overreaching"
+      : weekAtDate.tsb < 0   ? "fatigued"
+      : weekAtDate.tsb <= 10 ? "optimal"
+      : "detuned";
+  }
+
+  console.log(`\n📊 Context loaded (week of ${weekAtDate?.weekStart.toISOString().split("T")[0]}):`);
+
   console.log(`   TSB: ${context.currentTSB} (${context.formStatus})`);
   console.log(`   CTL: ${context.currentCTL} | ATL: ${context.currentATL}`);
   console.log(`   Avg fatigue (7d): ${context.avgFatigue.toFixed(1)}/10`);
   console.log(`   Avg mood (7d): ${context.avgMood.toFixed(1)}/10`);
   console.log("─".repeat(70));
 
-  const question = QUESTIONS[1]; // Change index to try different questions
+  const question = QUESTIONS[2]; // Change index to try different questions
   console.log(`\n💬 Question: ${question}\n`);
 
   const initialState = createInitialState(user.id, question, context);
