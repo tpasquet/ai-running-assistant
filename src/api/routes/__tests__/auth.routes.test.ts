@@ -3,6 +3,15 @@ import Fastify from "fastify";
 import { authPlugin } from "../../plugins/auth.plugin.js";
 import { authRoutes } from "../auth.routes.js";
 
+// Prevent PrismaClient instantiation in test environment
+vi.mock("../../../infra/db/prisma.js", () => ({
+  prisma: {
+    user: { findUnique: vi.fn(), create: vi.fn() },
+    account: { findUnique: vi.fn(), create: vi.fn() },
+    passwordResetToken: { findUnique: vi.fn(), create: vi.fn(), update: vi.fn(), updateMany: vi.fn() },
+  },
+}));
+
 const mockOAuth = {
   getAuthorizationUrl: vi
     .fn()
@@ -33,16 +42,15 @@ describe("auth routes", () => {
     await app.close();
   });
 
-  it("GET /auth/strava/callback returns JWT and enqueues initial-sync", async () => {
+  it("GET /auth/strava/callback sets auth cookie and redirects to dashboard", async () => {
     const app = await buildApp();
     const res = await app.inject({
       method: "GET",
       url: "/auth/strava/callback?code=valid-code&scope=activity:read_all",
     });
-    expect(res.statusCode).toBe(200);
-    const body = res.json<{ jwt: string }>();
-    expect(body.jwt).toBeDefined();
-    expect(typeof body.jwt).toBe("string");
+    expect(res.statusCode).toBe(302);
+    expect(res.headers.location).toContain("status=ok");
+    expect(res.headers["set-cookie"]).toBeDefined();
     expect(mockQueue.add).toHaveBeenCalledWith(
       "initial-sync",
       { type: "initial-sync", userId: "user-1" }

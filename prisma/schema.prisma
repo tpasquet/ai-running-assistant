@@ -7,17 +7,58 @@ datasource db {
   provider = "postgresql"
 }
 
+// ── Identity ──────────────────────────────────────────────────────
+
 model User {
-  id             String          @id @default(cuid())
-  stravaId       Int             @unique
-  username       String
-  createdAt      DateTime        @default(now())
-  stravaToken    StravaToken?
-  activities     Activity[]
-  weeklyAggs     WeeklyAggregate[]
-  dailyFeedbacks DailyFeedback[]
-  goals          Goal[]
+  id            String   @id @default(cuid())
+  email         String?  @unique  // null for Strava-only users (until email auth added)
+  name          String?
+  emailVerified Boolean  @default(false)
+  // Legacy Strava primary identifier (optional — users may auth via email only)
+  stravaId      Int?     @unique
+  username      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  accounts            Account[]
+  passwordResetTokens PasswordResetToken[]
+  stravaToken         StravaToken?
+  activities          Activity[]
+  weeklyAggs          WeeklyAggregate[]
+  dailyFeedbacks      DailyFeedback[]
+  goals               Goal[]
 }
+
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider          String   // "email" | "google"
+  providerAccountId String   // email address or OAuth sub
+
+  passwordHash      String?  // email provider only
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+// ── Strava integration ────────────────────────────────────────────
 
 model StravaToken {
   id              String   @id @default(cuid())
@@ -59,26 +100,26 @@ model Activity {
 }
 
 model WeeklyAggregate {
-  id                  String   @id @default(cuid())
-  userId              String
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  weekStart           DateTime
-  weekNumber          Int
-  year                Int
-  totalDistanceM      Float    @default(0)
-  totalDurationSec    Int      @default(0)
-  totalElevationM     Float    @default(0)
-  sessionCount        Int      @default(0)
-  runCount            Int      @default(0)
-  totalTss            Float    @default(0)
-  ctl                 Float    @default(0)
-  atl                 Float    @default(0)
-  tsb                 Float    @default(0)
-  monotony            Float    @default(0)
-  strain              Float    @default(0)
-  avgPerceivedEffort  Float?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekStart          DateTime
+  weekNumber         Int
+  year               Int
+  totalDistanceM     Float    @default(0)
+  totalDurationSec   Int      @default(0)
+  totalElevationM    Float    @default(0)
+  sessionCount       Int      @default(0)
+  runCount           Int      @default(0)
+  totalTss           Float    @default(0)
+  ctl                Float    @default(0)
+  atl                Float    @default(0)
+  tsb                Float    @default(0)
+  monotony           Float    @default(0)
+  strain             Float    @default(0)
+  avgPerceivedEffort Float?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@unique([userId, weekStart])
   @@index([userId, weekStart])

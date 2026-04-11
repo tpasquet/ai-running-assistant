@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
+import rateLimit from "@fastify/rate-limit";
 import { aiRoutes } from "./routes/ai.routes.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { webhookRoutes } from "./routes/webhook.routes.js";
@@ -24,7 +25,14 @@ export async function createServer() {
     logger: { level: process.env.LOG_LEVEL ?? "info" },
   });
 
-  await app.register(cors, { origin: true });
+  await app.register(cors, {
+    origin: process.env.CORS_ORIGIN ?? true,
+    credentials: true,
+  });
+
+  await app.register(rateLimit, {
+    global: false, // opt-in per route via config.rateLimit
+  });
 
   await app.register(authPlugin, {
     jwtSecret: getEnv("JWT_SECRET"),
@@ -60,6 +68,8 @@ export async function createServer() {
     iteration: 3,
     status: "ok",
   }));
+
+  app.get("/health", async () => ({ ok: true }));
 
   return app;
 }

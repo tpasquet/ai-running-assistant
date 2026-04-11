@@ -1,6 +1,5 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { ActivityRepository } from "../../infra/db/repositories/ActivityRepository.js";
 import { prisma } from "../../infra/db/prisma.js";
 
 const QuerySchema = z.object({
@@ -10,18 +9,14 @@ const QuerySchema = z.object({
 });
 
 export async function activityRoutes(app: FastifyInstance) {
-  const repo = new ActivityRepository(prisma);
-
-  app.get("/activities", async (request, reply) => {
-    await request.authenticate();
-
+  app.get("/activities", { preHandler: [app.authenticate] }, async (request, reply) => {
     const parsed = QuerySchema.safeParse(request.query);
     if (!parsed.success) {
       return reply.code(400).send({ error: "Invalid query params", details: parsed.error.flatten() });
     }
 
     const { limit, offset, type } = parsed.data;
-    const userId = request.user.userId;
+    const userId = request.user.sub;
 
     const [items, total] = await Promise.all([
       prisma.activity.findMany({
