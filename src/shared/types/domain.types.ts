@@ -72,6 +72,26 @@ export interface Activity {
   // Optional
   polyline: string | null;     // encoded polyline for map
   gearId: string | null;       // gear_id from Strava
+
+  // Enriched Strava fields
+  sportType: string | null;         // More specific type (TrailRun, VirtualRun…)
+  workoutType: number | null;       // 0=default, 1=race, 2=long run, 3=workout
+  sufferScore: number | null;       // Strava suffer score
+  perceivedExertion: number | null; // RPE from Strava app (DetailedActivity)
+  elevHigh: number | null;          // Highest elevation (m)
+  elevLow: number | null;           // Lowest elevation (m)
+  prCount: number | null;           // PRs achieved
+  isTrainer: boolean;               // Treadmill / indoor
+}
+
+export interface LapSummary {
+  lapIndex: number;
+  distanceM: number;
+  movingTimeSec: number;
+  avgPaceSecKm: number;
+  avgHrBpm: number | null;
+  maxHrBpm: number | null;
+  paceZone: number | null; // 0=no zone, 1-5=Strava zones
 }
 
 export interface ActivitySummary {
@@ -82,6 +102,7 @@ export interface ActivitySummary {
   avgPaceSecKm: number;
   tss: number | null;
   perceivedEffort: number | null;
+  laps: LapSummary[]; // empty if not yet fetched
 }
 
 export interface WeeklyAggregate {

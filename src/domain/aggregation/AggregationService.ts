@@ -1,10 +1,11 @@
 import type { PrismaClient } from "../../generated/prisma/client.js";
 import type { Redis } from "ioredis";
-import type { AggregatedContext, ActivitySummary, WeeklyAggregateSummary } from "../../shared/types/domain.types.js";
+import type { AggregatedContext, ActivitySummary, LapSummary, WeeklyAggregateSummary } from "../../shared/types/domain.types.js";
 import { ActivityRepository } from "../../infra/db/repositories/ActivityRepository.js";
 import { AggregateRepository } from "../../infra/db/repositories/AggregateRepository.js";
 import { FeedbackRepository } from "../../infra/db/repositories/FeedbackRepository.js";
 import { GoalRepository } from "../../infra/db/repositories/GoalRepository.js";
+import { LapRepository } from "../../infra/db/repositories/LapRepository.js";
 import {
   recalculateLoadFromScratch,
   updateLoadMetrics,
@@ -27,6 +28,8 @@ export class AggregationService {
   private readonly feedbackRepo: FeedbackRepository;
   private readonly goalRepo: GoalRepository;
 
+  private readonly lapRepo: LapRepository;
+
   constructor(
     private readonly db: PrismaClient,
     private readonly cache: Redis,
@@ -35,6 +38,7 @@ export class AggregationService {
     this.aggregateRepo = new AggregateRepository(db);
     this.feedbackRepo = new FeedbackRepository(db);
     this.goalRepo = new GoalRepository(db);
+    this.lapRepo = new LapRepository();
   }
 
   /**
@@ -163,6 +167,11 @@ export class AggregationService {
       this.goalRepo.findNextRace(userId),
     ]);
 
+    // Fetch laps for each recent activity in parallel
+    const lapsPerActivity = await Promise.all(
+      recentActivities.map((a) => this.lapRepo.findByActivity(a.id))
+    );
+
     // Latest load from most recent week
     const latestWeek = weeklyAggs[0];
     const currentCTL = latestWeek?.ctl ?? 0;
@@ -190,15 +199,27 @@ export class AggregationService {
         }
       : null;
 
-    const activitySummaries: ActivitySummary[] = recentActivities.map((a) => ({
-      id: a.id,
-      date: a.startDate.toISOString().slice(0, 10),
-      distanceM: a.distanceM,
-      durationSec: a.movingTimeSec,
-      avgPaceSecKm: a.avgPaceSecKm,
-      tss: a.tss,
-      perceivedEffort: a.perceivedEffort,
-    }));
+    const activitySummaries: ActivitySummary[] = recentActivities.map((a, i) => {
+      const laps: LapSummary[] = (lapsPerActivity[i] ?? []).map((l: { lapIndex: number; distanceM: number; movingTimeSec: number; avgPaceSecKm: number; avgHrBpm: number | null; maxHrBpm: number | null; paceZone: number | null }) => ({
+        lapIndex: l.lapIndex,
+        distanceM: l.distanceM,
+        movingTimeSec: l.movingTimeSec,
+        avgPaceSecKm: l.avgPaceSecKm,
+        avgHrBpm: l.avgHrBpm,
+        maxHrBpm: l.maxHrBpm,
+        paceZone: l.paceZone,
+      }));
+      return {
+        id: a.id,
+        date: a.startDate.toISOString().slice(0, 10),
+        distanceM: a.distanceM,
+        durationSec: a.movingTimeSec,
+        avgPaceSecKm: a.avgPaceSecKm,
+        tss: a.tss,
+        perceivedEffort: a.perceivedEffort,
+        laps,
+      };
+    });
 
     const weeklySummaries: WeeklyAggregateSummary[] = weeklyAggs.map((w) => ({
       weekNumber: w.weekNumber,

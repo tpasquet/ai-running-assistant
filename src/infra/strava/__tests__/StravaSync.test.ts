@@ -9,10 +9,15 @@ vi.mock("../../../shared/utils/sleep.js", () => ({
 const mockClient = {
   getActivities: vi.fn(),
   getActivity: vi.fn(),
+  getLaps: vi.fn().mockResolvedValue([]), // laps default to empty
 } as any;
 
 const mockRepo = {
-  upsert: vi.fn(),
+  upsert: vi.fn().mockResolvedValue({ id: "act-1" }),
+} as any;
+
+const mockLapRepo = {
+  upsertMany: vi.fn().mockResolvedValue(undefined),
 } as any;
 
 describe("StravaSync", () => {
@@ -20,7 +25,9 @@ describe("StravaSync", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    sync = new StravaSync(mockClient, mockRepo);
+    mockRepo.upsert.mockResolvedValue({ id: "act-1" });
+    mockClient.getLaps.mockResolvedValue([]);
+    sync = new StravaSync(mockClient, mockRepo, mockLapRepo);
   });
 
   it("syncs all pages until empty response", async () => {
@@ -38,6 +45,7 @@ describe("StravaSync", () => {
 
     expect(mockClient.getActivities).toHaveBeenCalledTimes(2);
     expect(mockRepo.upsert).toHaveBeenCalledTimes(1);
+    expect(mockClient.getLaps).toHaveBeenCalledTimes(1);
   });
 
   it("filters out non-running activity types", async () => {
@@ -59,6 +67,7 @@ describe("StravaSync", () => {
     await sync.syncInitial("user-1");
 
     expect(mockRepo.upsert).toHaveBeenCalledTimes(1); // only Run
+    expect(mockClient.getLaps).toHaveBeenCalledTimes(1); // only for the Run
   });
 
   it("syncs a single activity by stravaId", async () => {
@@ -72,6 +81,7 @@ describe("StravaSync", () => {
 
     expect(mockClient.getActivity).toHaveBeenCalledWith(999);
     expect(mockRepo.upsert).toHaveBeenCalledTimes(1);
+    expect(mockClient.getLaps).toHaveBeenCalledWith(999);
   });
 
   it("skips non-running types in syncActivity", async () => {
@@ -84,5 +94,23 @@ describe("StravaSync", () => {
     await sync.syncActivity("user-1", 888);
 
     expect(mockRepo.upsert).not.toHaveBeenCalled();
+    expect(mockClient.getLaps).not.toHaveBeenCalled();
+  });
+
+  it("continues syncing even if getLaps fails", async () => {
+    mockClient.getActivities
+      .mockResolvedValueOnce([
+        {
+          id: 1, type: "Run", start_date: "2024-01-15T10:00:00Z",
+          distance: 10000, moving_time: 3600, elapsed_time: 3700,
+          total_elevation_gain: 100, average_speed: 2.78, max_speed: 4.0,
+        },
+      ])
+      .mockResolvedValueOnce([]);
+    mockClient.getLaps.mockRejectedValueOnce(new Error("Strava API error"));
+
+    // Should not throw
+    await expect(sync.syncInitial("user-1")).resolves.toBeUndefined();
+    expect(mockRepo.upsert).toHaveBeenCalledTimes(1);
   });
 });

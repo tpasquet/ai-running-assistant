@@ -101,7 +101,22 @@ export class ContextAssembler {
         text += ` | TSS ${Math.round(activity.tss)}`;
       }
 
-      text += "\n";
+      // Render lap breakdown for structured sessions (>1 lap)
+      if (activity.laps?.length > 1) {
+        text += ` | ${activity.laps.length} laps`;
+        text += "\n";
+        activity.laps.forEach((lap) => {
+          const lapKm = (lap.distanceM / 1000).toFixed(2);
+          const lapPace = this.formatPace(lap.avgPaceSecKm);
+          const lapMin = Math.round(lap.movingTimeSec / 60);
+          text += `  L${lap.lapIndex}: ${lapKm}km @ ${lapPace}/km in ${lapMin}min`;
+          if (lap.avgHrBpm) text += ` | HR ${lap.avgHrBpm}bpm`;
+          if (lap.paceZone && lap.paceZone > 0) text += ` | zone ${lap.paceZone}`;
+          text += "\n";
+        });
+      } else {
+        text += "\n";
+      }
     });
 
     return text.trimEnd();

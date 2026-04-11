@@ -14,7 +14,8 @@
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:seed": "tsx --env-file .env prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:import-strava": "tsx --env-file .env prisma/import-strava-export.ts"
   },
   "keywords": ["running", "coaching", "ai", "langgraph", "langchain"],
   "author": "",

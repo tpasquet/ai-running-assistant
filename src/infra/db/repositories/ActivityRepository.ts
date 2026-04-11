@@ -26,12 +26,13 @@ interface ActivityData {
 export class ActivityRepository {
   constructor(private readonly db: PrismaClient) {}
 
-  async upsert(data: ActivityData): Promise<void> {
+  async upsert(data: ActivityData): Promise<{ id: string }> {
     const { stravaId, ...rest } = data;
-    await this.db.activity.upsert({
+    return this.db.activity.upsert({
       where: { stravaId },
       create: { stravaId, ...rest },
       update: rest,
+      select: { id: true },
     });
   }
 

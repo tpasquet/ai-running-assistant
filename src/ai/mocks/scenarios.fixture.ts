@@ -26,6 +26,7 @@ function convertToActivitySummary(activity: any): ActivitySummary {
     avgPaceSecKm: activity.avgPaceSecKm,
     tss: activity.tss,
     perceivedEffort: activity.perceivedEffort,
+    laps: [], // mock scenarios have no lap detail
   };
 }
 
