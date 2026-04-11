@@ -142,3 +142,6 @@ export class ContextAssembler {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   }
 }
+
+/** Singleton — reuse across requests, no per-request allocation */
+export const contextAssembler = new ContextAssembler();

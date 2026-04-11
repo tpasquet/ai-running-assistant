@@ -1,4 +1,5 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
 import { prisma } from "../../../infra/db/prisma.js";
 
@@ -21,7 +22,7 @@ export const getSimilarSessionsTool = new DynamicStructuredTool({
       .describe("Tolerance percentage for matching (default 10%)"),
     limit: z.number().default(5).describe("Maximum number of results"),
   }),
-  func: async ({ targetPaceSecKm, distanceKm, tolerancePct, limit }, config) => {
+  func: async ({ targetPaceSecKm, distanceKm, tolerancePct, limit }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });

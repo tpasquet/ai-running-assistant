@@ -16,8 +16,16 @@ import { synthesizerNode } from "./nodes/synthesizer.js";
  * all outputs are available when the synthesizer merges them.
  *
  * Priority hierarchy in synthesizer: Physio (safety) > Mental > Coach (perf)
+ *
+ * Note: channel reducers intentionally use `unknown` — LangGraph's type inference
+ * breaks with complex generics. Type safety is enforced at the node level via
+ * `Partial<GraphState>` return types and the properly-typed GraphState interface.
  */
 export function createCoachingGraph() {
+  // Cast to `any` to work around LangGraph TypeScript limitations: precise GraphState
+  // types break node-name inference (addEdge/setEntryPoint become untyped). Type safety
+  // is enforced at node level via `Partial<GraphState>` return types instead.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graph = new StateGraph<GraphState>({
     channels: {
       userId:        { value: (l?: string,   r?: string)   => r ?? l ?? "" },
@@ -33,7 +41,8 @@ export function createCoachingGraph() {
       promptVersion: { value: (l?: string,   r?: string)   => r ?? l ?? null },
       modelVersion:  { value: (l?: string,   r?: string)   => r ?? l ?? null },
     },
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any);
 
   graph.addNode("router",      routerNode);
   graph.addNode("coach",       coachNode);

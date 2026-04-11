@@ -1,4 +1,5 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
 import { prisma } from "../../../infra/db/prisma.js";
 
@@ -19,7 +20,7 @@ export const getPainHistoryTool = new DynamicStructuredTool({
       .default(1)
       .describe("Minimum pain intensity to include (1-10)"),
   }),
-  func: async ({ days, minIntensity }, config) => {
+  func: async ({ days, minIntensity }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });

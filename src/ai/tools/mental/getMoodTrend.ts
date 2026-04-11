@@ -1,4 +1,5 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
 import { prisma } from "../../../infra/db/prisma.js";
 
@@ -15,7 +16,7 @@ export const getMoodTrendTool = new DynamicStructuredTool({
   schema: z.object({
     days: z.number().default(14).describe("Number of days to analyze"),
   }),
-  func: async ({ days }, config) => {
+  func: async ({ days }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });

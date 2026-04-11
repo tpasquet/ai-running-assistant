@@ -1,4 +1,8 @@
 import type { AggregatedContext } from "../../shared/types/domain.types";
+import type { CoachOutput } from "../../ai/schemas/coach.schema.js";
+import type { PhysioOutput } from "../../ai/schemas/physio.schema.js";
+import type { MentalOutput } from "../../ai/schemas/mental.schema.js";
+import type { SynthesizerOutput } from "../../ai/schemas/synthesizer.schema.js";
 
 /**
  * GraphState - State object passed through LangGraph nodes
@@ -23,12 +27,12 @@ export interface GraphState {
   urgency: "low" | "medium" | "high";
 
   // Agent outputs
-  coachOutput: unknown | null;
-  physioOutput: unknown | null;
-  mentalOutput: unknown | null;
+  coachOutput: CoachOutput | null;
+  physioOutput: PhysioOutput | null;
+  mentalOutput: MentalOutput | null;
 
-  // Final output
-  finalResponse: unknown | null;
+  // Final output — always SynthesizerOutput shape
+  finalResponse: SynthesizerOutput | null;
 
   // Metadata
   promptVersion: string | null;
