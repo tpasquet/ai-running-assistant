@@ -1,14 +1,13 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
-import { MOCK_DAILY_FEEDBACK } from "../../mocks/feedback.fixture.js";
+import { prisma } from "../../../infra/db/prisma.js";
 
 /**
  * Tool: get_mood_trend
  *
  * Analyzes mood and motivation trends over time.
  * Useful for mental coach to detect burnout and mental fatigue patterns.
- *
- * Mock implementation - uses in-memory fixture data.
  */
 export const getMoodTrendTool = new DynamicStructuredTool({
   name: "get_mood_trend",
@@ -17,7 +16,7 @@ export const getMoodTrendTool = new DynamicStructuredTool({
   schema: z.object({
     days: z.number().default(14).describe("Number of days to analyze"),
   }),
-  func: async ({ days }, config) => {
+  func: async ({ days }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });
@@ -26,37 +25,32 @@ export const getMoodTrendTool = new DynamicStructuredTool({
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
-    const feedbacks = MOCK_DAILY_FEEDBACK.filter(
-      (fb) => fb.userId === userId && fb.date >= cutoffDate
-    ).sort((a, b) => a.date.getTime() - b.date.getTime());
+    const feedbacks = await prisma.dailyFeedback.findMany({
+      where: { userId, date: { gte: cutoffDate } },
+      orderBy: { date: "asc" },
+      select: {
+        date: true,
+        mood: true,
+        sleepQuality: true,
+        fatigue: true,
+        notes: true,
+      },
+    });
 
     if (feedbacks.length === 0) {
       return JSON.stringify({ error: "No feedback data available" });
     }
 
-    // Calculate trends
-    const avgMood =
-      feedbacks.reduce((sum, fb) => sum + fb.mood, 0) / feedbacks.length;
-    const avgSleep =
-      feedbacks.reduce((sum, fb) => sum + fb.sleepQuality, 0) / feedbacks.length;
-    const avgFatigue =
-      feedbacks.reduce((sum, fb) => sum + fb.fatigue, 0) / feedbacks.length;
+    const avgMood = avg(feedbacks.map((fb) => fb.mood));
+    const avgSleep = avg(feedbacks.map((fb) => fb.sleepQuality));
+    const avgFatigue = avg(feedbacks.map((fb) => fb.fatigue));
 
-    // Detect trend direction (comparing first half to second half)
+    // Trend: compare first half vs second half
     const mid = Math.floor(feedbacks.length / 2);
-    const firstHalfMood =
-      feedbacks
-        .slice(0, mid)
-        .reduce((sum, fb) => sum + fb.mood, 0) / mid;
-    const secondHalfMood =
-      feedbacks
-        .slice(mid)
-        .reduce((sum, fb) => sum + fb.mood, 0) /
-      (feedbacks.length - mid);
-
+    const firstHalfMood = avg(feedbacks.slice(0, mid).map((fb) => fb.mood));
+    const secondHalfMood = avg(feedbacks.slice(mid).map((fb) => fb.mood));
     const moodTrend = secondHalfMood > firstHalfMood ? "improving" : "declining";
 
-    // Recent entries
     const recentEntries = feedbacks.slice(-7).map((fb) => ({
       date: fb.date.toISOString().split("T")[0],
       mood: fb.mood,
@@ -77,3 +71,8 @@ export const getMoodTrendTool = new DynamicStructuredTool({
     });
   },
 });
+
+function avg(values: number[]): number {
+  if (values.length === 0) return 0;
+  return values.reduce((s, v) => s + v, 0) / values.length;
+}

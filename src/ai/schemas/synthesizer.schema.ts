@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-/**
- * Synthesizer output schema - unified response from multiple agents
- */
 export const SynthesizerOutputSchema = z.object({
   summary: z
     .string()
@@ -14,9 +11,9 @@ export const SynthesizerOutputSchema = z.object({
 
   detailedAdvice: z
     .object({
-      training: z.string().optional().describe("Training advice from coach"),
-      injury: z.string().optional().describe("Injury/physio advice"),
-      mental: z.string().optional().describe("Mental/psychological advice"),
+      training: z.string().nullable().describe("Training advice from coach, or null"),
+      injury: z.string().nullable().describe("Injury/physio advice, or null"),
+      mental: z.string().nullable().describe("Mental/psychological advice, or null"),
     })
     .describe("Detailed breakdown by domain"),
 
@@ -26,8 +23,8 @@ export const SynthesizerOutputSchema = z.object({
 
   conflicts: z
     .string()
-    .optional()
-    .describe("Any conflicts between agents and how they were resolved"),
+    .nullable()
+    .describe("Any conflicts between agents and how they were resolved, or null"),
 
   nextSteps: z
     .array(z.string())

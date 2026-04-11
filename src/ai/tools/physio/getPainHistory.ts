@@ -1,14 +1,13 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
-import { MOCK_DAILY_FEEDBACK } from "../../mocks/feedback.fixture.js";
+import { prisma } from "../../../infra/db/prisma.js";
 
 /**
  * Tool: get_pain_history
  *
  * Retrieves pain reports over specified time period.
  * Useful for physio to assess injury progression and patterns.
- *
- * Mock implementation - uses in-memory fixture data.
  */
 export const getPainHistoryTool = new DynamicStructuredTool({
   name: "get_pain_history",
@@ -21,7 +20,7 @@ export const getPainHistoryTool = new DynamicStructuredTool({
       .default(1)
       .describe("Minimum pain intensity to include (1-10)"),
   }),
-  func: async ({ days, minIntensity }, config) => {
+  func: async ({ days, minIntensity }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });
@@ -30,26 +29,32 @@ export const getPainHistoryTool = new DynamicStructuredTool({
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
-    const painReports = MOCK_DAILY_FEEDBACK.filter((fb) => {
-      if (fb.userId !== userId) return false;
-      if (fb.date < cutoffDate) return false;
-      if (!fb.painIntensity || fb.painIntensity < minIntensity) return false;
-
-      return true;
-    })
-      .sort((a, b) => b.date.getTime() - a.date.getTime())
-      .map((fb) => ({
-        date: fb.date.toISOString().split("T")[0],
-        painLocations: fb.painLocations,
-        intensity: fb.painIntensity,
-        notes: fb.notes,
-        fatigue: fb.fatigue,
-        muscleSoreness: fb.muscleSoreness,
-      }));
-
-    return JSON.stringify({
-      count: painReports.length,
-      reports: painReports,
+    const feedbacks = await prisma.dailyFeedback.findMany({
+      where: {
+        userId,
+        date: { gte: cutoffDate },
+        painIntensity: { gte: minIntensity },
+      },
+      orderBy: { date: "desc" },
+      select: {
+        date: true,
+        painLocations: true,
+        painIntensity: true,
+        notes: true,
+        fatigue: true,
+        muscleSoreness: true,
+      },
     });
+
+    const reports = feedbacks.map((fb) => ({
+      date: fb.date.toISOString().split("T")[0],
+      painLocations: fb.painLocations,
+      intensity: fb.painIntensity,
+      notes: fb.notes,
+      fatigue: fb.fatigue,
+      muscleSoreness: fb.muscleSoreness,
+    }));
+
+    return JSON.stringify({ count: reports.length, reports });
   },
 });

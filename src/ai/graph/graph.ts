@@ -7,106 +7,89 @@ import { mentalNode } from "./nodes/mental.js";
 import { synthesizerNode } from "./nodes/synthesizer.js";
 
 /**
- * Creates the coaching graph for RunCoach AI
+ * RunCoach AI — Multi-agent coaching graph
  *
- * Graph flow:
- * 1. START → router (classify intent and select agents)
- * 2. router → [coach | physio | mental] (conditional, can be parallel)
- * 3. agents → synthesizer (merge outputs into coherent response)
- * 4. synthesizer → END
+ * Flow (sequential conditional):
+ *   START → router → (coach?) → (physio?) → (mental?) → synthesizer → END
  *
- * Note: In iteration 1, context is passed in directly (no loadContext node needed).
- * In iteration 2, we'll add a loadContext node to fetch from database.
+ * Each agent only runs if selected by the router. Sequential execution ensures
+ * all outputs are available when the synthesizer merges them.
+ *
+ * Priority hierarchy in synthesizer: Physio (safety) > Mental > Coach (perf)
+ *
+ * Note: channel reducers intentionally use `unknown` — LangGraph's type inference
+ * breaks with complex generics. Type safety is enforced at the node level via
+ * `Partial<GraphState>` return types and the properly-typed GraphState interface.
  */
 export function createCoachingGraph() {
+  // Cast to `any` to work around LangGraph TypeScript limitations: precise GraphState
+  // types break node-name inference (addEdge/setEntryPoint become untyped). Type safety
+  // is enforced at node level via `Partial<GraphState>` return types instead.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const graph = new StateGraph<GraphState>({
     channels: {
-      userId: {
-        value: (left?: string, right?: string) => right ?? left ?? "",
-      },
-      message: {
-        value: (left?: string, right?: string) => right ?? left ?? "",
-      },
-      context: {
-        value: (left?: unknown, right?: unknown) => right ?? left ?? null,
-      },
-      selectedAgents: {
-        value: (left?: string[], right?: string[]) => right ?? left ?? [],
-      },
-      intent: {
-        value: (left?: string, right?: string) => right ?? left ?? "",
-      },
-      urgency: {
-        value: (left?: string, right?: string) => right ?? left ?? "low",
-      },
-      coachOutput: {
-        value: (left?: unknown, right?: unknown) => right ?? left ?? null,
-      },
-      physioOutput: {
-        value: (left?: unknown, right?: unknown) => right ?? left ?? null,
-      },
-      mentalOutput: {
-        value: (left?: unknown, right?: unknown) => right ?? left ?? null,
-      },
-      finalResponse: {
-        value: (left?: unknown, right?: unknown) => right ?? left ?? null,
-      },
-      promptVersion: {
-        value: (left?: string, right?: string) => right ?? left ?? null,
-      },
-      modelVersion: {
-        value: (left?: string, right?: string) => right ?? left ?? null,
-      },
+      userId:        { value: (l?: string,   r?: string)   => r ?? l ?? "" },
+      message:       { value: (l?: string,   r?: string)   => r ?? l ?? "" },
+      context:       { value: (l?: unknown,  r?: unknown)  => r ?? l ?? null },
+      selectedAgents:{ value: (l?: string[], r?: string[]) => r ?? l ?? [] },
+      intent:        { value: (l?: string,   r?: string)   => r ?? l ?? "" },
+      urgency:       { value: (l?: string,   r?: string)   => r ?? l ?? "low" },
+      coachOutput:   { value: (l?: unknown,  r?: unknown)  => r ?? l ?? null },
+      physioOutput:  { value: (l?: unknown,  r?: unknown)  => r ?? l ?? null },
+      mentalOutput:  { value: (l?: unknown,  r?: unknown)  => r ?? l ?? null },
+      finalResponse: { value: (l?: unknown,  r?: unknown)  => r ?? l ?? null },
+      promptVersion: { value: (l?: string,   r?: string)   => r ?? l ?? null },
+      modelVersion:  { value: (l?: string,   r?: string)   => r ?? l ?? null },
     },
-  });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any);
 
-  // Add all nodes
-  graph.addNode("router", routerNode);
-  graph.addNode("coach", coachNode);
-  graph.addNode("physio", physioNode);
-  graph.addNode("mental", mentalNode);
+  graph.addNode("router",      routerNode);
+  graph.addNode("coach",       coachNode);
+  graph.addNode("physio",      physioNode);
+  graph.addNode("mental",      mentalNode);
   graph.addNode("synthesizer", synthesizerNode);
 
-  // Entry point
   graph.setEntryPoint("router");
 
-  // Conditional routing from router to agents
-  graph.addConditionalEdges("router", routeToAgents, {
-    coach: "coach",
-    physio: "physio",
-    mental: "mental",
-    synthesizer: "synthesizer", // If no agents selected, skip to synthesizer
-  });
+  // router → first selected agent (or synthesizer if none selected)
+  graph.addConditionalEdges(
+    "router",
+    (s) => {
+      if (!s.selectedAgents?.length) return "synthesizer";
+      if (s.selectedAgents.includes("coach"))  return "coach";
+      if (s.selectedAgents.includes("physio")) return "physio";
+      if (s.selectedAgents.includes("mental")) return "mental";
+      return "synthesizer";
+    },
+    { coach: "coach", physio: "physio", mental: "mental", synthesizer: "synthesizer" }
+  );
 
-  // All agents flow to synthesizer
-  graph.addEdge("coach", "synthesizer");
-  graph.addEdge("physio", "synthesizer");
-  graph.addEdge("mental", "synthesizer");
+  // coach → physio (if selected) else mental (if selected) else synthesizer
+  graph.addConditionalEdges(
+    "coach",
+    (s) => {
+      if (s.selectedAgents.includes("physio")) return "physio";
+      if (s.selectedAgents.includes("mental")) return "mental";
+      return "synthesizer";
+    },
+    { physio: "physio", mental: "mental", synthesizer: "synthesizer" }
+  );
 
-  // Synthesizer to end
+  // physio → mental (if selected) else synthesizer
+  graph.addConditionalEdges(
+    "physio",
+    (s) => s.selectedAgents.includes("mental") ? "mental" : "synthesizer",
+    { mental: "mental", synthesizer: "synthesizer" }
+  );
+
+  // mental always → synthesizer
+  graph.addEdge("mental",      "synthesizer");
   graph.addEdge("synthesizer", END);
 
   return graph;
 }
 
-/**
- * Routing logic - determines which agent(s) to invoke
- */
-function routeToAgents(state: GraphState): string | string[] {
-  if (!state.selectedAgents || state.selectedAgents.length === 0) {
-    return "synthesizer"; // No agents selected, skip to synthesizer
-  }
-
-  // Return first agent (LangGraph will handle parallel execution if needed)
-  // For now, we'll execute sequentially
-  return state.selectedAgents[0];
-}
-
-/**
- * Compile the graph (ready for execution)
- * This will be used in T8 when all nodes are implemented
- */
 export function compileCoachingGraph() {
-  const graph = createCoachingGraph();
-  return graph.compile();
+  return createCoachingGraph().compile();
 }

@@ -1,15 +1,13 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
+import type { CallbackManagerForToolRun } from "@langchain/core/callbacks/manager";
 import { z } from "zod";
-import { MOCK_ACTIVITIES } from "../../mocks/activities.fixture.js";
+import { prisma } from "../../../infra/db/prisma.js";
 
 /**
  * Tool: get_similar_sessions
  *
  * Finds similar past activities by pace and distance for comparison.
  * Useful for the coach to reference past performance at similar intensity.
- *
- * Mock implementation - uses in-memory fixture data.
- * In iteration 2, replace with database query.
  */
 export const getSimilarSessionsTool = new DynamicStructuredTool({
   name: "get_similar_sessions",
@@ -24,7 +22,7 @@ export const getSimilarSessionsTool = new DynamicStructuredTool({
       .describe("Tolerance percentage for matching (default 10%)"),
     limit: z.number().default(5).describe("Maximum number of results"),
   }),
-  func: async ({ targetPaceSecKm, distanceKm, tolerancePct, limit }, config) => {
+  func: async ({ targetPaceSecKm, distanceKm, tolerancePct, limit }, _runManager?: CallbackManagerForToolRun, config?: { configurable?: { userId?: string } }) => {
     const userId = config?.configurable?.userId;
     if (!userId) {
       return JSON.stringify({ error: "userId not provided in config" });
@@ -33,31 +31,39 @@ export const getSimilarSessionsTool = new DynamicStructuredTool({
     const targetDistanceM = distanceKm * 1000;
     const tolerance = tolerancePct / 100;
 
-    // Mock implementation - filter in-memory data
-    const similar = MOCK_ACTIVITIES.filter((a) => {
-      if (a.userId !== userId) return false;
+    const activities = await prisma.activity.findMany({
+      where: {
+        userId,
+        avgPaceSecKm: {
+          gte: targetPaceSecKm * (1 - tolerance),
+          lte: targetPaceSecKm * (1 + tolerance),
+        },
+        distanceM: {
+          gte: targetDistanceM * (1 - tolerance),
+          lte: targetDistanceM * (1 + tolerance),
+        },
+      },
+      orderBy: { startDate: "desc" },
+      take: limit,
+      select: {
+        startDate: true,
+        distanceM: true,
+        avgPaceSecKm: true,
+        avgHrBpm: true,
+        perceivedEffort: true,
+        tss: true,
+      },
+    });
 
-      const paceMatch =
-        a.avgPaceSecKm >= targetPaceSecKm * (1 - tolerance) &&
-        a.avgPaceSecKm <= targetPaceSecKm * (1 + tolerance);
+    const result = activities.map((a) => ({
+      date: a.startDate.toISOString().split("T")[0],
+      distanceKm: (a.distanceM / 1000).toFixed(1),
+      paceSecKm: a.avgPaceSecKm,
+      avgHr: a.avgHrBpm,
+      perceivedEffort: a.perceivedEffort,
+      tss: a.tss,
+    }));
 
-      const distanceMatch =
-        a.distanceM >= targetDistanceM * (1 - tolerance) &&
-        a.distanceM <= targetDistanceM * (1 + tolerance);
-
-      return paceMatch && distanceMatch;
-    })
-      .sort((a, b) => b.startDate.getTime() - a.startDate.getTime())
-      .slice(0, limit)
-      .map((a) => ({
-        date: a.startDate.toISOString().split("T")[0],
-        distanceKm: (a.distanceM / 1000).toFixed(1),
-        paceSecKm: a.avgPaceSecKm,
-        avgHr: a.avgHrBpm,
-        perceivedEffort: a.perceivedEffort,
-        tss: a.tss,
-      }));
-
-    return JSON.stringify(similar);
+    return JSON.stringify(result);
   },
 });
