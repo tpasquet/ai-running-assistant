@@ -5,6 +5,7 @@ const STRAVA_BASE = "https://www.strava.com/api/v3";
 export interface StravaActivity {
   id: number;
   type: string;
+  sport_type?: string;
   start_date: string;
   distance: number;
   moving_time: number;
@@ -19,6 +20,14 @@ export interface StravaActivity {
   average_temp?: number;
   map?: { summary_polyline?: string };
   gear_id?: string;
+  // Enriched fields
+  workout_type?: number;      // 0=default, 1=race, 2=long run, 3=workout
+  suffer_score?: number;      // Strava suffer score
+  perceived_exertion?: number; // RPE from Strava app (DetailedActivity only)
+  elev_high?: number;         // Highest elevation (m)
+  elev_low?: number;          // Lowest elevation (m)
+  pr_count?: number;          // Personal records count
+  trainer?: boolean;          // Treadmill activity
 }
 
 export interface StravaLap {

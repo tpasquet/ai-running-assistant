@@ -152,6 +152,14 @@ export const ActivityScalarFieldEnum = {
   tss: 'tss',
   polyline: 'polyline',
   gearId: 'gearId',
+  sportType: 'sportType',
+  workoutType: 'workoutType',
+  sufferScore: 'sufferScore',
+  perceivedExertion: 'perceivedExertion',
+  elevHigh: 'elevHigh',
+  elevLow: 'elevLow',
+  prCount: 'prCount',
+  isTrainer: 'isTrainer',
   createdAt: 'createdAt'
 } as const
 

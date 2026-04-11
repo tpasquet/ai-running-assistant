@@ -108,6 +108,14 @@ export class StravaSync {
       tss: null,
       polyline: a.map?.summary_polyline ?? null,
       gearId: a.gear_id ?? null,
+      sportType: a.sport_type ?? null,
+      workoutType: a.workout_type ?? null,
+      sufferScore: a.suffer_score ?? null,
+      perceivedExertion: a.perceived_exertion ?? null,
+      elevHigh: a.elev_high ?? null,
+      elevLow: a.elev_low ?? null,
+      prCount: a.pr_count ?? null,
+      isTrainer: a.trainer ?? false,
     };
   }
 

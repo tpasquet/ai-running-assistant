@@ -1116,6 +1116,14 @@ export const ActivityScalarFieldEnum = {
   tss: 'tss',
   polyline: 'polyline',
   gearId: 'gearId',
+  sportType: 'sportType',
+  workoutType: 'workoutType',
+  sufferScore: 'sufferScore',
+  perceivedExertion: 'perceivedExertion',
+  elevHigh: 'elevHigh',
+  elevLow: 'elevLow',
+  prCount: 'prCount',
+  isTrainer: 'isTrainer',
   createdAt: 'createdAt'
 } as const
 
@@ -1299,6 +1307,13 @@ export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, '
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

@@ -72,6 +72,16 @@ export interface Activity {
   // Optional
   polyline: string | null;     // encoded polyline for map
   gearId: string | null;       // gear_id from Strava
+
+  // Enriched Strava fields
+  sportType: string | null;         // More specific type (TrailRun, VirtualRun…)
+  workoutType: number | null;       // 0=default, 1=race, 2=long run, 3=workout
+  sufferScore: number | null;       // Strava suffer score
+  perceivedExertion: number | null; // RPE from Strava app (DetailedActivity)
+  elevHigh: number | null;          // Highest elevation (m)
+  elevLow: number | null;           // Lowest elevation (m)
+  prCount: number | null;           // PRs achieved
+  isTrainer: boolean;               // Treadmill / indoor
 }
 
 export interface LapSummary {

@@ -90,10 +90,19 @@ model Activity {
   calories            Float?
   avgCadence          Float?
   avgTemp             Float?
-  perceivedEffort     Int?
+  perceivedEffort     Int?     // RPE 1-10, user-input via app
   tss                 Float?
   polyline            String?
   gearId              String?
+  // Enriched Strava fields
+  sportType           String?  // More specific than type (e.g. TrailRun vs Run)
+  workoutType         Int?     // 0=default, 1=race, 2=long run, 3=workout
+  sufferScore         Int?     // Strava suffer score (≈ TSS proxy)
+  perceivedExertion   Float?   // RPE from Strava app (DetailedActivity only)
+  elevHigh            Float?   // Highest elevation point (m)
+  elevLow             Float?   // Lowest elevation point (m)
+  prCount             Int?     // Personal records achieved
+  isTrainer           Boolean  @default(false) // Treadmill / indoor trainer
   createdAt           DateTime @default(now())
   laps                Lap[]
 
