@@ -58,7 +58,7 @@ export const getSimilarSessionsTool = new DynamicStructuredTool({
     const result = activities.map((a) => ({
       date: a.startDate.toISOString().split("T")[0],
       distanceKm: (a.distanceM / 1000).toFixed(1),
-      paceSecKm: a.avgPaceSecKm,
+      paceSecKm: Math.round(a.avgPaceSecKm),
       avgHr: a.avgHrBpm,
       perceivedEffort: a.perceivedEffort,
       tss: a.tss,

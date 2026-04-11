@@ -76,6 +76,7 @@ model Activity {
   userId              String
   user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   stravaId            BigInt   @unique
+  name                String?  // Activity name from Strava
   type                String
   startDate           DateTime
   distanceM           Float

@@ -139,6 +139,7 @@ function toActivityData(userId: string, a: StravaExportActivity) {
   return {
     userId,
     stravaId:            BigInt(a.id),
+    name:                a.name ?? null,
     type:                a.type,
     startDate:           new Date(a.start_date),
     distanceM:           a.distance,

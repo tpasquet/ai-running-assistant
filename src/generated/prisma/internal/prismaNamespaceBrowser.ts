@@ -134,6 +134,7 @@ export const ActivityScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   stravaId: 'stravaId',
+  name: 'name',
   type: 'type',
   startDate: 'startDate',
   distanceM: 'distanceM',

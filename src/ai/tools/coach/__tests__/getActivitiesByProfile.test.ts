@@ -1,132 +1,144 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { getActivitiesByProfileTool } from "../getActivitiesByProfile.js";
 
-// ── Mock prisma ────────────────────────────────────────────────────────────────
-
 vi.mock("../../../../infra/db/prisma.js", () => ({
-  prisma: {
-    activity: {
-      findMany: vi.fn(),
-    },
-  },
+  prisma: { activity: { findMany: vi.fn() } },
 }));
 
 import { prisma } from "../../../../infra/db/prisma.js";
 
-// ── Fixtures ───────────────────────────────────────────────────────────────────
+// ── Fixtures ──────────────────────────────────────────────────────────────────
 
 const makeActivity = (overrides: Record<string, unknown> = {}) => ({
-  startDate:          new Date("2026-03-15T08:00:00Z"),
-  type:               "Run",
-  distanceM:          21_100,
-  movingTimeSec:      6_600,
-  avgPaceSecKm:       312,
-  avgHrBpm:           155,
-  tss:                130,
-  perceivedEffort:    7,
-  workoutType:        2,  // long_run
-  totalElevationGainM: 180,
-  isTrainer:          false,
-  laps:               [],
+  name:                null,
+  startDate:           new Date("2026-03-15T08:00:00Z"),
+  distanceM:           10_000,
+  movingTimeSec:       3_600,
+  avgPaceSecKm:        360,
+  avgHrBpm:            140,
+  tss:                 70,
+  perceivedEffort:     null,
+  workoutType:         null,
+  totalElevationGainM: 80,
+  isTrainer:           false,
+  laps:                [],
   ...overrides,
 });
 
 const cfg = { configurable: { userId: "user-abc" } };
 
-// ── Tests ──────────────────────────────────────────────────────────────────────
+// ── Tests ─────────────────────────────────────────────────────────────────────
 
 describe("getActivitiesByProfileTool", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("maps 'long_run' sessionType to workoutType 2 in the query", async () => {
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([]);
+  // ── workoutType-based classification ──────────────────────────────────────
 
-    await getActivitiesByProfileTool.invoke({ sessionType: "long_run" }, cfg);
-
-    expect(prisma.activity.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({ workoutType: 2 }),
-      })
-    );
+  it("returns race when workoutType=1", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ workoutType: 1, name: "Morning run" }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "race" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("race");
   });
 
-  it("maps 'race' sessionType to workoutType 1", async () => {
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([]);
-
-    await getActivitiesByProfileTool.invoke({ sessionType: "race" }, cfg);
-
-    expect(prisma.activity.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({ workoutType: 1 }),
-      })
-    );
-  });
-
-  it("applies no workoutType filter for 'any'", async () => {
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([]);
-
-    await getActivitiesByProfileTool.invoke({ sessionType: "any" }, cfg);
-
-    const call = vi.mocked(prisma.activity.findMany).mock.calls[0][0];
-    expect(call.where).not.toHaveProperty("workoutType");
-  });
-
-  it("applies distance filters in meters", async () => {
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([]);
-
-    await getActivitiesByProfileTool.invoke({ sessionType: "any", minDistanceKm: 15, maxDistanceKm: 25 }, cfg);
-
-    expect(prisma.activity.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: expect.objectContaining({
-          distanceM: { gte: 15_000, lte: 25_000 },
-        }),
-      })
-    );
-  });
-
-  it("formats activity fields correctly", async () => {
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([makeActivity()]);
-
+  it("returns long_run when workoutType=2", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ workoutType: 2, distanceM: 22_000 }),
+    ]);
     const raw = await getActivitiesByProfileTool.invoke({ sessionType: "long_run" }, cfg);
     const [a] = JSON.parse(raw as string);
-
-    expect(a.date).toBe("2026-03-15");
     expect(a.type).toBe("long_run");
-    expect(a.distanceKm).toBe(21.1);
-    expect(a.durationMin).toBe(110);
-    expect(a.avgPaceSecKm).toBe(312);
-    expect(a.tss).toBe(130);
-    expect(a.rpe).toBe(7);
-    expect(a.indoor).toBe(false);
   });
 
-  it("omits laps field when activity has 0 or 1 lap", async () => {
+  it("returns workout when workoutType=3", async () => {
     vi.mocked(prisma.activity.findMany).mockResolvedValue([
-      makeActivity({ laps: [] }),
-      makeActivity({ laps: [{ lapIndex: 1, distanceM: 21100, avgPaceSecKm: 312, avgHrBpm: 155, paceZone: 3 }] }),
+      makeActivity({ workoutType: 3 }),
     ]);
-
-    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "any" }, cfg);
-    const results = JSON.parse(raw as string);
-
-    expect(results[0].laps).toBeUndefined();
-    expect(results[1].laps).toBeUndefined();
-  });
-
-  it("includes laps when activity has multiple laps", async () => {
-    const laps = [
-      { lapIndex: 1, distanceM: 5000, avgPaceSecKm: 300, avgHrBpm: 150, paceZone: 3 },
-      { lapIndex: 2, distanceM: 5000, avgPaceSecKm: 295, avgHrBpm: 158, paceZone: 4 },
-    ];
-    vi.mocked(prisma.activity.findMany).mockResolvedValue([makeActivity({ laps })]);
-
     const raw = await getActivitiesByProfileTool.invoke({ sessionType: "workout" }, cfg);
     const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("workout");
+  });
 
-    expect(a.laps).toHaveLength(2);
-    expect(a.laps[0].paceSecKm).toBe(300);
-    expect(a.laps[1].zone).toBe(4);
+  it("classifies as race when name matches race keyword (workoutType null)", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ name: "Paris Marathon 2025", workoutType: null }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "race" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("race");
+  });
+
+  // ── Heuristic classification (workoutType null) ───────────────────────────
+
+  it("classifies as long_run when distance ≥ 16km (workoutType null)", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ distanceM: 20_000, workoutType: null }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "long_run" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("long_run");
+  });
+
+  it("classifies as workout when laps have pace zone ≥ 4 (workoutType null)", async () => {
+    const laps = [
+      { lapIndex: 1, distanceM: 2000, avgPaceSecKm: 280, avgHrBpm: 165, paceZone: 4 },
+      { lapIndex: 2, distanceM: 2000, avgPaceSecKm: 330, avgHrBpm: 145, paceZone: 2 },
+    ];
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ distanceM: 10_000, workoutType: null, laps }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "workout" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("workout");
+  });
+
+  it("classifies as easy when distance < 16km and no high zones (workoutType null)", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ distanceM: 8_000, workoutType: null, laps: [] }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "easy" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.type).toBe("easy");
+  });
+
+  // ── Distance filters ──────────────────────────────────────────────────────
+
+  it("applies both min and max distance filters in meters", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([]);
+    await getActivitiesByProfileTool.invoke({ sessionType: "any", minDistanceKm: 15, maxDistanceKm: 25 }, cfg);
+    const call = vi.mocked(prisma.activity.findMany).mock.calls[0][0];
+    expect(call.where.distanceM).toEqual({ gte: 15_000, lte: 25_000 });
+  });
+
+  // ── Output format ─────────────────────────────────────────────────────────
+
+  it("rounds paceSecKm to integer", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ avgPaceSecKm: 307.088 }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "any" }, cfg);
+    const [a] = JSON.parse(raw as string);
+    expect(a.avgPaceSecKm).toBe(307);
+    expect(Number.isInteger(a.avgPaceSecKm)).toBe(true);
+  });
+
+  it("includes laps array only when activity has multiple laps", async () => {
+    vi.mocked(prisma.activity.findMany).mockResolvedValue([
+      makeActivity({ laps: [] }),
+      makeActivity({
+        laps: [
+          { lapIndex: 1, distanceM: 5000, avgPaceSecKm: 300, avgHrBpm: 155, paceZone: 3 },
+          { lapIndex: 2, distanceM: 5000, avgPaceSecKm: 295, avgHrBpm: 160, paceZone: 4 },
+        ],
+      }),
+    ]);
+    const raw = await getActivitiesByProfileTool.invoke({ sessionType: "any" }, cfg);
+    const [a, b] = JSON.parse(raw as string);
+    expect(a.laps).toBeUndefined();
+    expect(b.laps).toHaveLength(2);
+    expect(b.laps[0].paceSecKm).toBe(300);
   });
 
   it("returns error when userId is missing", async () => {

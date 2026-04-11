@@ -42,6 +42,12 @@ export type ActivityAvgAggregateOutputType = {
   avgTemp: number | null
   perceivedEffort: number | null
   tss: number | null
+  workoutType: number | null
+  sufferScore: number | null
+  perceivedExertion: number | null
+  elevHigh: number | null
+  elevLow: number | null
+  prCount: number | null
 }
 
 export type ActivitySumAggregateOutputType = {
@@ -60,12 +66,19 @@ export type ActivitySumAggregateOutputType = {
   avgTemp: number | null
   perceivedEffort: number | null
   tss: number | null
+  workoutType: number | null
+  sufferScore: number | null
+  perceivedExertion: number | null
+  elevHigh: number | null
+  elevLow: number | null
+  prCount: number | null
 }
 
 export type ActivityMinAggregateOutputType = {
   id: string | null
   userId: string | null
   stravaId: bigint | null
+  name: string | null
   type: string | null
   startDate: Date | null
   distanceM: number | null
@@ -84,6 +97,14 @@ export type ActivityMinAggregateOutputType = {
   tss: number | null
   polyline: string | null
   gearId: string | null
+  sportType: string | null
+  workoutType: number | null
+  sufferScore: number | null
+  perceivedExertion: number | null
+  elevHigh: number | null
+  elevLow: number | null
+  prCount: number | null
+  isTrainer: boolean | null
   createdAt: Date | null
 }
 
@@ -91,6 +112,7 @@ export type ActivityMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   stravaId: bigint | null
+  name: string | null
   type: string | null
   startDate: Date | null
   distanceM: number | null
@@ -109,6 +131,14 @@ export type ActivityMaxAggregateOutputType = {
   tss: number | null
   polyline: string | null
   gearId: string | null
+  sportType: string | null
+  workoutType: number | null
+  sufferScore: number | null
+  perceivedExertion: number | null
+  elevHigh: number | null
+  elevLow: number | null
+  prCount: number | null
+  isTrainer: boolean | null
   createdAt: Date | null
 }
 
@@ -116,6 +146,7 @@ export type ActivityCountAggregateOutputType = {
   id: number
   userId: number
   stravaId: number
+  name: number
   type: number
   startDate: number
   distanceM: number
@@ -134,6 +165,14 @@ export type ActivityCountAggregateOutputType = {
   tss: number
   polyline: number
   gearId: number
+  sportType: number
+  workoutType: number
+  sufferScore: number
+  perceivedExertion: number
+  elevHigh: number
+  elevLow: number
+  prCount: number
+  isTrainer: number
   createdAt: number
   _all: number
 }
@@ -155,6 +194,12 @@ export type ActivityAvgAggregateInputType = {
   avgTemp?: true
   perceivedEffort?: true
   tss?: true
+  workoutType?: true
+  sufferScore?: true
+  perceivedExertion?: true
+  elevHigh?: true
+  elevLow?: true
+  prCount?: true
 }
 
 export type ActivitySumAggregateInputType = {
@@ -173,12 +218,19 @@ export type ActivitySumAggregateInputType = {
   avgTemp?: true
   perceivedEffort?: true
   tss?: true
+  workoutType?: true
+  sufferScore?: true
+  perceivedExertion?: true
+  elevHigh?: true
+  elevLow?: true
+  prCount?: true
 }
 
 export type ActivityMinAggregateInputType = {
   id?: true
   userId?: true
   stravaId?: true
+  name?: true
   type?: true
   startDate?: true
   distanceM?: true
@@ -197,6 +249,14 @@ export type ActivityMinAggregateInputType = {
   tss?: true
   polyline?: true
   gearId?: true
+  sportType?: true
+  workoutType?: true
+  sufferScore?: true
+  perceivedExertion?: true
+  elevHigh?: true
+  elevLow?: true
+  prCount?: true
+  isTrainer?: true
   createdAt?: true
 }
 
@@ -204,6 +264,7 @@ export type ActivityMaxAggregateInputType = {
   id?: true
   userId?: true
   stravaId?: true
+  name?: true
   type?: true
   startDate?: true
   distanceM?: true
@@ -222,6 +283,14 @@ export type ActivityMaxAggregateInputType = {
   tss?: true
   polyline?: true
   gearId?: true
+  sportType?: true
+  workoutType?: true
+  sufferScore?: true
+  perceivedExertion?: true
+  elevHigh?: true
+  elevLow?: true
+  prCount?: true
+  isTrainer?: true
   createdAt?: true
 }
 
@@ -229,6 +298,7 @@ export type ActivityCountAggregateInputType = {
   id?: true
   userId?: true
   stravaId?: true
+  name?: true
   type?: true
   startDate?: true
   distanceM?: true
@@ -247,6 +317,14 @@ export type ActivityCountAggregateInputType = {
   tss?: true
   polyline?: true
   gearId?: true
+  sportType?: true
+  workoutType?: true
+  sufferScore?: true
+  perceivedExertion?: true
+  elevHigh?: true
+  elevLow?: true
+  prCount?: true
+  isTrainer?: true
   createdAt?: true
   _all?: true
 }
@@ -341,6 +419,7 @@ export type ActivityGroupByOutputType = {
   id: string
   userId: string
   stravaId: bigint
+  name: string | null
   type: string
   startDate: Date
   distanceM: number
@@ -359,6 +438,14 @@ export type ActivityGroupByOutputType = {
   tss: number | null
   polyline: string | null
   gearId: string | null
+  sportType: string | null
+  workoutType: number | null
+  sufferScore: number | null
+  perceivedExertion: number | null
+  elevHigh: number | null
+  elevLow: number | null
+  prCount: number | null
+  isTrainer: boolean
   createdAt: Date
   _count: ActivityCountAggregateOutputType | null
   _avg: ActivityAvgAggregateOutputType | null
@@ -389,6 +476,7 @@ export type ActivityWhereInput = {
   id?: Prisma.StringFilter<"Activity"> | string
   userId?: Prisma.StringFilter<"Activity"> | string
   stravaId?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  name?: Prisma.StringNullableFilter<"Activity"> | string | null
   type?: Prisma.StringFilter<"Activity"> | string
   startDate?: Prisma.DateTimeFilter<"Activity"> | Date | string
   distanceM?: Prisma.FloatFilter<"Activity"> | number
@@ -407,14 +495,24 @@ export type ActivityWhereInput = {
   tss?: Prisma.FloatNullableFilter<"Activity"> | number | null
   polyline?: Prisma.StringNullableFilter<"Activity"> | string | null
   gearId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  sportType?: Prisma.StringNullableFilter<"Activity"> | string | null
+  workoutType?: Prisma.IntNullableFilter<"Activity"> | number | null
+  sufferScore?: Prisma.IntNullableFilter<"Activity"> | number | null
+  perceivedExertion?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevHigh?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevLow?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  prCount?: Prisma.IntNullableFilter<"Activity"> | number | null
+  isTrainer?: Prisma.BoolFilter<"Activity"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  laps?: Prisma.LapListRelationFilter
 }
 
 export type ActivityOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   distanceM?: Prisma.SortOrder
@@ -433,8 +531,17 @@ export type ActivityOrderByWithRelationInput = {
   tss?: Prisma.SortOrderInput | Prisma.SortOrder
   polyline?: Prisma.SortOrderInput | Prisma.SortOrder
   gearId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sportType?: Prisma.SortOrderInput | Prisma.SortOrder
+  workoutType?: Prisma.SortOrderInput | Prisma.SortOrder
+  sufferScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrderInput | Prisma.SortOrder
+  elevHigh?: Prisma.SortOrderInput | Prisma.SortOrder
+  elevLow?: Prisma.SortOrderInput | Prisma.SortOrder
+  prCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTrainer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  laps?: Prisma.LapOrderByRelationAggregateInput
 }
 
 export type ActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -444,6 +551,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ActivityWhereInput[]
   NOT?: Prisma.ActivityWhereInput | Prisma.ActivityWhereInput[]
   userId?: Prisma.StringFilter<"Activity"> | string
+  name?: Prisma.StringNullableFilter<"Activity"> | string | null
   type?: Prisma.StringFilter<"Activity"> | string
   startDate?: Prisma.DateTimeFilter<"Activity"> | Date | string
   distanceM?: Prisma.FloatFilter<"Activity"> | number
@@ -462,14 +570,24 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   tss?: Prisma.FloatNullableFilter<"Activity"> | number | null
   polyline?: Prisma.StringNullableFilter<"Activity"> | string | null
   gearId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  sportType?: Prisma.StringNullableFilter<"Activity"> | string | null
+  workoutType?: Prisma.IntNullableFilter<"Activity"> | number | null
+  sufferScore?: Prisma.IntNullableFilter<"Activity"> | number | null
+  perceivedExertion?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevHigh?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevLow?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  prCount?: Prisma.IntNullableFilter<"Activity"> | number | null
+  isTrainer?: Prisma.BoolFilter<"Activity"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  laps?: Prisma.LapListRelationFilter
 }, "id" | "stravaId">
 
 export type ActivityOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   distanceM?: Prisma.SortOrder
@@ -488,6 +606,14 @@ export type ActivityOrderByWithAggregationInput = {
   tss?: Prisma.SortOrderInput | Prisma.SortOrder
   polyline?: Prisma.SortOrderInput | Prisma.SortOrder
   gearId?: Prisma.SortOrderInput | Prisma.SortOrder
+  sportType?: Prisma.SortOrderInput | Prisma.SortOrder
+  workoutType?: Prisma.SortOrderInput | Prisma.SortOrder
+  sufferScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrderInput | Prisma.SortOrder
+  elevHigh?: Prisma.SortOrderInput | Prisma.SortOrder
+  elevLow?: Prisma.SortOrderInput | Prisma.SortOrder
+  prCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  isTrainer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ActivityCountOrderByAggregateInput
   _avg?: Prisma.ActivityAvgOrderByAggregateInput
@@ -503,6 +629,7 @@ export type ActivityScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   stravaId?: Prisma.BigIntWithAggregatesFilter<"Activity"> | bigint | number
+  name?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
   type?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Activity"> | Date | string
   distanceM?: Prisma.FloatWithAggregatesFilter<"Activity"> | number
@@ -521,12 +648,21 @@ export type ActivityScalarWhereWithAggregatesInput = {
   tss?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
   polyline?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
   gearId?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
+  sportType?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
+  workoutType?: Prisma.IntNullableWithAggregatesFilter<"Activity"> | number | null
+  sufferScore?: Prisma.IntNullableWithAggregatesFilter<"Activity"> | number | null
+  perceivedExertion?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
+  elevHigh?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
+  elevLow?: Prisma.FloatNullableWithAggregatesFilter<"Activity"> | number | null
+  prCount?: Prisma.IntNullableWithAggregatesFilter<"Activity"> | number | null
+  isTrainer?: Prisma.BoolWithAggregatesFilter<"Activity"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Activity"> | Date | string
 }
 
 export type ActivityCreateInput = {
   id?: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -545,14 +681,24 @@ export type ActivityCreateInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutActivitiesInput
+  laps?: Prisma.LapCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateInput = {
   id?: string
   userId: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -571,12 +717,22 @@ export type ActivityUncheckedCreateInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
+  laps?: Prisma.LapUncheckedCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -595,14 +751,24 @@ export type ActivityUpdateInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutActivitiesNestedInput
+  laps?: Prisma.LapUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -621,13 +787,23 @@ export type ActivityUncheckedUpdateInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  laps?: Prisma.LapUncheckedUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityCreateManyInput = {
   id?: string
   userId: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -646,12 +822,21 @@ export type ActivityCreateManyInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
 }
 
 export type ActivityUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -670,6 +855,14 @@ export type ActivityUpdateManyMutationInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -677,6 +870,7 @@ export type ActivityUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -695,6 +889,14 @@ export type ActivityUncheckedUpdateManyInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -712,6 +914,7 @@ export type ActivityCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   distanceM?: Prisma.SortOrder
@@ -730,6 +933,14 @@ export type ActivityCountOrderByAggregateInput = {
   tss?: Prisma.SortOrder
   polyline?: Prisma.SortOrder
   gearId?: Prisma.SortOrder
+  sportType?: Prisma.SortOrder
+  workoutType?: Prisma.SortOrder
+  sufferScore?: Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrder
+  elevHigh?: Prisma.SortOrder
+  elevLow?: Prisma.SortOrder
+  prCount?: Prisma.SortOrder
+  isTrainer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -749,12 +960,19 @@ export type ActivityAvgOrderByAggregateInput = {
   avgTemp?: Prisma.SortOrder
   perceivedEffort?: Prisma.SortOrder
   tss?: Prisma.SortOrder
+  workoutType?: Prisma.SortOrder
+  sufferScore?: Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrder
+  elevHigh?: Prisma.SortOrder
+  elevLow?: Prisma.SortOrder
+  prCount?: Prisma.SortOrder
 }
 
 export type ActivityMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   distanceM?: Prisma.SortOrder
@@ -773,6 +991,14 @@ export type ActivityMaxOrderByAggregateInput = {
   tss?: Prisma.SortOrder
   polyline?: Prisma.SortOrder
   gearId?: Prisma.SortOrder
+  sportType?: Prisma.SortOrder
+  workoutType?: Prisma.SortOrder
+  sufferScore?: Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrder
+  elevHigh?: Prisma.SortOrder
+  elevLow?: Prisma.SortOrder
+  prCount?: Prisma.SortOrder
+  isTrainer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -780,6 +1006,7 @@ export type ActivityMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   type?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   distanceM?: Prisma.SortOrder
@@ -798,6 +1025,14 @@ export type ActivityMinOrderByAggregateInput = {
   tss?: Prisma.SortOrder
   polyline?: Prisma.SortOrder
   gearId?: Prisma.SortOrder
+  sportType?: Prisma.SortOrder
+  workoutType?: Prisma.SortOrder
+  sufferScore?: Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrder
+  elevHigh?: Prisma.SortOrder
+  elevLow?: Prisma.SortOrder
+  prCount?: Prisma.SortOrder
+  isTrainer?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -817,6 +1052,17 @@ export type ActivitySumOrderByAggregateInput = {
   avgTemp?: Prisma.SortOrder
   perceivedEffort?: Prisma.SortOrder
   tss?: Prisma.SortOrder
+  workoutType?: Prisma.SortOrder
+  sufferScore?: Prisma.SortOrder
+  perceivedExertion?: Prisma.SortOrder
+  elevHigh?: Prisma.SortOrder
+  elevLow?: Prisma.SortOrder
+  prCount?: Prisma.SortOrder
+}
+
+export type ActivityScalarRelationFilter = {
+  is?: Prisma.ActivityWhereInput
+  isNot?: Prisma.ActivityWhereInput
 }
 
 export type ActivityCreateNestedManyWithoutUserInput = {
@@ -893,9 +1139,24 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type ActivityCreateNestedOneWithoutLapsInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLapsInput, Prisma.ActivityUncheckedCreateWithoutLapsInput>
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLapsInput
+  connect?: Prisma.ActivityWhereUniqueInput
+}
+
+export type ActivityUpdateOneRequiredWithoutLapsNestedInput = {
+  create?: Prisma.XOR<Prisma.ActivityCreateWithoutLapsInput, Prisma.ActivityUncheckedCreateWithoutLapsInput>
+  connectOrCreate?: Prisma.ActivityCreateOrConnectWithoutLapsInput
+  upsert?: Prisma.ActivityUpsertWithoutLapsInput
+  connect?: Prisma.ActivityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ActivityUpdateToOneWithWhereWithoutLapsInput, Prisma.ActivityUpdateWithoutLapsInput>, Prisma.ActivityUncheckedUpdateWithoutLapsInput>
+}
+
 export type ActivityCreateWithoutUserInput = {
   id?: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -914,12 +1175,22 @@ export type ActivityCreateWithoutUserInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
+  laps?: Prisma.LapCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityUncheckedCreateWithoutUserInput = {
   id?: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -938,7 +1209,16 @@ export type ActivityUncheckedCreateWithoutUserInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
+  laps?: Prisma.LapUncheckedCreateNestedManyWithoutActivityInput
 }
 
 export type ActivityCreateOrConnectWithoutUserInput = {
@@ -974,6 +1254,7 @@ export type ActivityScalarWhereInput = {
   id?: Prisma.StringFilter<"Activity"> | string
   userId?: Prisma.StringFilter<"Activity"> | string
   stravaId?: Prisma.BigIntFilter<"Activity"> | bigint | number
+  name?: Prisma.StringNullableFilter<"Activity"> | string | null
   type?: Prisma.StringFilter<"Activity"> | string
   startDate?: Prisma.DateTimeFilter<"Activity"> | Date | string
   distanceM?: Prisma.FloatFilter<"Activity"> | number
@@ -992,12 +1273,21 @@ export type ActivityScalarWhereInput = {
   tss?: Prisma.FloatNullableFilter<"Activity"> | number | null
   polyline?: Prisma.StringNullableFilter<"Activity"> | string | null
   gearId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  sportType?: Prisma.StringNullableFilter<"Activity"> | string | null
+  workoutType?: Prisma.IntNullableFilter<"Activity"> | number | null
+  sufferScore?: Prisma.IntNullableFilter<"Activity"> | number | null
+  perceivedExertion?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevHigh?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  elevLow?: Prisma.FloatNullableFilter<"Activity"> | number | null
+  prCount?: Prisma.IntNullableFilter<"Activity"> | number | null
+  isTrainer?: Prisma.BoolFilter<"Activity"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
 }
 
-export type ActivityCreateManyUserInput = {
+export type ActivityCreateWithoutLapsInput = {
   id?: string
   stravaId: bigint | number
+  name?: string | null
   type: string
   startDate: Date | string
   distanceM: number
@@ -1016,12 +1306,173 @@ export type ActivityCreateManyUserInput = {
   tss?: number | null
   polyline?: string | null
   gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutActivitiesInput
+}
+
+export type ActivityUncheckedCreateWithoutLapsInput = {
+  id?: string
+  userId: string
+  stravaId: bigint | number
+  name?: string | null
+  type: string
+  startDate: Date | string
+  distanceM: number
+  movingTimeSec: number
+  elapsedTimeSec: number
+  totalElevationGainM: number
+  averageSpeedMS: number
+  maxSpeedMS: number
+  avgPaceSecKm: number
+  avgHrBpm?: number | null
+  maxHrBpm?: number | null
+  calories?: number | null
+  avgCadence?: number | null
+  avgTemp?: number | null
+  perceivedEffort?: number | null
+  tss?: number | null
+  polyline?: string | null
+  gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
+  createdAt?: Date | string
+}
+
+export type ActivityCreateOrConnectWithoutLapsInput = {
+  where: Prisma.ActivityWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutLapsInput, Prisma.ActivityUncheckedCreateWithoutLapsInput>
+}
+
+export type ActivityUpsertWithoutLapsInput = {
+  update: Prisma.XOR<Prisma.ActivityUpdateWithoutLapsInput, Prisma.ActivityUncheckedUpdateWithoutLapsInput>
+  create: Prisma.XOR<Prisma.ActivityCreateWithoutLapsInput, Prisma.ActivityUncheckedCreateWithoutLapsInput>
+  where?: Prisma.ActivityWhereInput
+}
+
+export type ActivityUpdateToOneWithWhereWithoutLapsInput = {
+  where?: Prisma.ActivityWhereInput
+  data: Prisma.XOR<Prisma.ActivityUpdateWithoutLapsInput, Prisma.ActivityUncheckedUpdateWithoutLapsInput>
+}
+
+export type ActivityUpdateWithoutLapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
+  movingTimeSec?: Prisma.IntFieldUpdateOperationsInput | number
+  elapsedTimeSec?: Prisma.IntFieldUpdateOperationsInput | number
+  totalElevationGainM?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageSpeedMS?: Prisma.FloatFieldUpdateOperationsInput | number
+  maxSpeedMS?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgPaceSecKm?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgHrBpm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxHrBpm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  calories?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avgCadence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avgTemp?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  perceivedEffort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutActivitiesNestedInput
+}
+
+export type ActivityUncheckedUpdateWithoutLapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
+  movingTimeSec?: Prisma.IntFieldUpdateOperationsInput | number
+  elapsedTimeSec?: Prisma.IntFieldUpdateOperationsInput | number
+  totalElevationGainM?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageSpeedMS?: Prisma.FloatFieldUpdateOperationsInput | number
+  maxSpeedMS?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgPaceSecKm?: Prisma.FloatFieldUpdateOperationsInput | number
+  avgHrBpm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxHrBpm?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  calories?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avgCadence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avgTemp?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  perceivedEffort?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ActivityCreateManyUserInput = {
+  id?: string
+  stravaId: bigint | number
+  name?: string | null
+  type: string
+  startDate: Date | string
+  distanceM: number
+  movingTimeSec: number
+  elapsedTimeSec: number
+  totalElevationGainM: number
+  averageSpeedMS: number
+  maxSpeedMS: number
+  avgPaceSecKm: number
+  avgHrBpm?: number | null
+  maxHrBpm?: number | null
+  calories?: number | null
+  avgCadence?: number | null
+  avgTemp?: number | null
+  perceivedEffort?: number | null
+  tss?: number | null
+  polyline?: string | null
+  gearId?: string | null
+  sportType?: string | null
+  workoutType?: number | null
+  sufferScore?: number | null
+  perceivedExertion?: number | null
+  elevHigh?: number | null
+  elevLow?: number | null
+  prCount?: number | null
+  isTrainer?: boolean
   createdAt?: Date | string
 }
 
 export type ActivityUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1040,12 +1491,22 @@ export type ActivityUpdateWithoutUserInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  laps?: Prisma.LapUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1064,12 +1525,22 @@ export type ActivityUncheckedUpdateWithoutUserInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  laps?: Prisma.LapUncheckedUpdateManyWithoutActivityNestedInput
 }
 
 export type ActivityUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   stravaId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   distanceM?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1088,15 +1559,53 @@ export type ActivityUncheckedUpdateManyWithoutUserInput = {
   tss?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   polyline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gearId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sportType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workoutType?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sufferScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  perceivedExertion?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevHigh?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  elevLow?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  prCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isTrainer?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ActivityCountOutputType
+ */
+
+export type ActivityCountOutputType = {
+  laps: number
+}
+
+export type ActivityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  laps?: boolean | ActivityCountOutputTypeCountLapsArgs
+}
+
+/**
+ * ActivityCountOutputType without action
+ */
+export type ActivityCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityCountOutputType
+   */
+  select?: Prisma.ActivityCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ActivityCountOutputType without action
+ */
+export type ActivityCountOutputTypeCountLapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LapWhereInput
+}
 
 
 export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   stravaId?: boolean
+  name?: boolean
   type?: boolean
   startDate?: boolean
   distanceM?: boolean
@@ -1115,14 +1624,25 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tss?: boolean
   polyline?: boolean
   gearId?: boolean
+  sportType?: boolean
+  workoutType?: boolean
+  sufferScore?: boolean
+  perceivedExertion?: boolean
+  elevHigh?: boolean
+  elevLow?: boolean
+  prCount?: boolean
+  isTrainer?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  laps?: boolean | Prisma.Activity$lapsArgs<ExtArgs>
+  _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
 
 export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   stravaId?: boolean
+  name?: boolean
   type?: boolean
   startDate?: boolean
   distanceM?: boolean
@@ -1141,6 +1661,14 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tss?: boolean
   polyline?: boolean
   gearId?: boolean
+  sportType?: boolean
+  workoutType?: boolean
+  sufferScore?: boolean
+  perceivedExertion?: boolean
+  elevHigh?: boolean
+  elevLow?: boolean
+  prCount?: boolean
+  isTrainer?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
@@ -1149,6 +1677,7 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   userId?: boolean
   stravaId?: boolean
+  name?: boolean
   type?: boolean
   startDate?: boolean
   distanceM?: boolean
@@ -1167,6 +1696,14 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tss?: boolean
   polyline?: boolean
   gearId?: boolean
+  sportType?: boolean
+  workoutType?: boolean
+  sufferScore?: boolean
+  perceivedExertion?: boolean
+  elevHigh?: boolean
+  elevLow?: boolean
+  prCount?: boolean
+  isTrainer?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["activity"]>
@@ -1175,6 +1712,7 @@ export type ActivitySelectScalar = {
   id?: boolean
   userId?: boolean
   stravaId?: boolean
+  name?: boolean
   type?: boolean
   startDate?: boolean
   distanceM?: boolean
@@ -1193,12 +1731,22 @@ export type ActivitySelectScalar = {
   tss?: boolean
   polyline?: boolean
   gearId?: boolean
+  sportType?: boolean
+  workoutType?: boolean
+  sufferScore?: boolean
+  perceivedExertion?: boolean
+  elevHigh?: boolean
+  elevLow?: boolean
+  prCount?: boolean
+  isTrainer?: boolean
   createdAt?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "stravaId" | "type" | "startDate" | "distanceM" | "movingTimeSec" | "elapsedTimeSec" | "totalElevationGainM" | "averageSpeedMS" | "maxSpeedMS" | "avgPaceSecKm" | "avgHrBpm" | "maxHrBpm" | "calories" | "avgCadence" | "avgTemp" | "perceivedEffort" | "tss" | "polyline" | "gearId" | "createdAt", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "stravaId" | "name" | "type" | "startDate" | "distanceM" | "movingTimeSec" | "elapsedTimeSec" | "totalElevationGainM" | "averageSpeedMS" | "maxSpeedMS" | "avgPaceSecKm" | "avgHrBpm" | "maxHrBpm" | "calories" | "avgCadence" | "avgTemp" | "perceivedEffort" | "tss" | "polyline" | "gearId" | "sportType" | "workoutType" | "sufferScore" | "perceivedExertion" | "elevHigh" | "elevLow" | "prCount" | "isTrainer" | "createdAt", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  laps?: boolean | Prisma.Activity$lapsArgs<ExtArgs>
+  _count?: boolean | Prisma.ActivityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1211,11 +1759,13 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "Activity"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    laps: Prisma.$LapPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
     stravaId: bigint
+    name: string | null
     type: string
     startDate: Date
     distanceM: number
@@ -1234,6 +1784,14 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     tss: number | null
     polyline: string | null
     gearId: string | null
+    sportType: string | null
+    workoutType: number | null
+    sufferScore: number | null
+    perceivedExertion: number | null
+    elevHigh: number | null
+    elevLow: number | null
+    prCount: number | null
+    isTrainer: boolean
     createdAt: Date
   }, ExtArgs["result"]["activity"]>
   composites: {}
@@ -1630,6 +2188,7 @@ readonly fields: ActivityFieldRefs;
 export interface Prisma__ActivityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  laps<T extends Prisma.Activity$lapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Activity$lapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1662,6 +2221,7 @@ export interface ActivityFieldRefs {
   readonly id: Prisma.FieldRef<"Activity", 'String'>
   readonly userId: Prisma.FieldRef<"Activity", 'String'>
   readonly stravaId: Prisma.FieldRef<"Activity", 'BigInt'>
+  readonly name: Prisma.FieldRef<"Activity", 'String'>
   readonly type: Prisma.FieldRef<"Activity", 'String'>
   readonly startDate: Prisma.FieldRef<"Activity", 'DateTime'>
   readonly distanceM: Prisma.FieldRef<"Activity", 'Float'>
@@ -1680,6 +2240,14 @@ export interface ActivityFieldRefs {
   readonly tss: Prisma.FieldRef<"Activity", 'Float'>
   readonly polyline: Prisma.FieldRef<"Activity", 'String'>
   readonly gearId: Prisma.FieldRef<"Activity", 'String'>
+  readonly sportType: Prisma.FieldRef<"Activity", 'String'>
+  readonly workoutType: Prisma.FieldRef<"Activity", 'Int'>
+  readonly sufferScore: Prisma.FieldRef<"Activity", 'Int'>
+  readonly perceivedExertion: Prisma.FieldRef<"Activity", 'Float'>
+  readonly elevHigh: Prisma.FieldRef<"Activity", 'Float'>
+  readonly elevLow: Prisma.FieldRef<"Activity", 'Float'>
+  readonly prCount: Prisma.FieldRef<"Activity", 'Int'>
+  readonly isTrainer: Prisma.FieldRef<"Activity", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Activity", 'DateTime'>
 }
     
@@ -2079,6 +2647,30 @@ export type ActivityDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Activities to delete.
    */
   limit?: number
+}
+
+/**
+ * Activity.laps
+ */
+export type Activity$lapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lap
+   */
+  select?: Prisma.LapSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lap
+   */
+  omit?: Prisma.LapOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LapInclude<ExtArgs> | null
+  where?: Prisma.LapWhereInput
+  orderBy?: Prisma.LapOrderByWithRelationInput | Prisma.LapOrderByWithRelationInput[]
+  cursor?: Prisma.LapWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LapScalarFieldEnum | Prisma.LapScalarFieldEnum[]
 }
 
 /**
