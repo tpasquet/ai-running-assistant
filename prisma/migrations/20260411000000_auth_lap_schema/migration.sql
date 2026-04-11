@@ -12,8 +12,8 @@ ALTER TABLE "User" ALTER COLUMN "username" DROP NOT NULL;
 -- updatedAt: add with default for existing rows, then keep it managed by app
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
--- unique constraint on email (only for non-null values)
-CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email") WHERE "email" IS NOT NULL;
+-- unique constraint on email (NULL values are not considered equal in PostgreSQL unique indexes)
+CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email");
 
 -- ── Account ───────────────────────────────────────────────────────────────────
 
