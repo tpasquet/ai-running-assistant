@@ -31,16 +31,14 @@ const BodySchema = z.object({
 export async function feedbackRoutes(app: FastifyInstance) {
   const service = new FeedbackService(prisma);
 
-  app.post("/feedback/daily", async (request, reply) => {
-    await request.authenticate();
-
+  app.post("/feedback/daily", { preHandler: [app.authenticate] }, async (request, reply) => {
     const parsed = BodySchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.code(400).send({ error: "Invalid body", details: parsed.error.flatten() });
     }
 
     const { date, ...rest } = parsed.data;
-    const userId = request.user.userId;
+    const userId = request.user.sub;
 
     try {
       await service.submit({

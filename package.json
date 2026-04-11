@@ -16,21 +16,15 @@
     "db:seed": "tsx --env-file .env prisma/seed.ts",
     "db:studio": "prisma studio"
   },
-  "keywords": [
-    "running",
-    "coaching",
-    "ai",
-    "langgraph",
-    "langchain"
-  ],
+  "keywords": ["running", "coaching", "ai", "langgraph", "langchain"],
   "author": "",
   "license": "MIT",
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": { "node": ">=22.0.0" },
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.2.0",
     "@fastify/jwt": "^10.0.0",
+    "@fastify/rate-limit": "^10.3.0",
     "@langchain/community": "^1.1.25",
     "@langchain/core": "^1.1.36",
     "@langchain/langgraph": "^1.2.6",
@@ -38,6 +32,7 @@
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "@types/pg": "^8.20.0",
+    "bcryptjs": "^3.0.3",
     "bullmq": "^5.73.0",
     "fastify": "^5.8.4",
     "fastify-plugin": "^5.1.0",
@@ -48,6 +43,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",

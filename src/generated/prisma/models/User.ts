@@ -36,23 +36,35 @@ export type UserSumAggregateOutputType = {
 
 export type UserMinAggregateOutputType = {
   id: string | null
+  email: string | null
+  name: string | null
+  emailVerified: boolean | null
   stravaId: number | null
   username: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
   id: string | null
+  email: string | null
+  name: string | null
+  emailVerified: boolean | null
   stravaId: number | null
   username: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
   id: number
+  email: number
+  name: number
+  emailVerified: number
   stravaId: number
   username: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -67,23 +79,35 @@ export type UserSumAggregateInputType = {
 
 export type UserMinAggregateInputType = {
   id?: true
+  email?: true
+  name?: true
+  emailVerified?: true
   stravaId?: true
   username?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
   id?: true
+  email?: true
+  name?: true
+  emailVerified?: true
   stravaId?: true
   username?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
   id?: true
+  email?: true
+  name?: true
+  emailVerified?: true
   stravaId?: true
   username?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -175,9 +199,13 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  stravaId: number
-  username: string
+  email: string | null
+  name: string | null
+  emailVerified: boolean
+  stravaId: number | null
+  username: string | null
   createdAt: Date
+  updatedAt: Date
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -205,9 +233,15 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  stravaId?: Prisma.IntFilter<"User"> | number
-  username?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
+  stravaId?: Prisma.IntNullableFilter<"User"> | number | null
+  username?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  accounts?: Prisma.AccountListRelationFilter
+  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   stravaToken?: Prisma.XOR<Prisma.StravaTokenNullableScalarRelationFilter, Prisma.StravaTokenWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   weeklyAggs?: Prisma.WeeklyAggregateListRelationFilter
@@ -217,9 +251,15 @@ export type UserWhereInput = {
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  stravaId?: Prisma.SortOrder
-  username?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  stravaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  accounts?: Prisma.AccountOrderByRelationAggregateInput
+  passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
   stravaToken?: Prisma.StravaTokenOrderByWithRelationInput
   activities?: Prisma.ActivityOrderByRelationAggregateInput
   weeklyAggs?: Prisma.WeeklyAggregateOrderByRelationAggregateInput
@@ -229,24 +269,34 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  email?: string
   stravaId?: number
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  username?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
+  username?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  accounts?: Prisma.AccountListRelationFilter
+  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   stravaToken?: Prisma.XOR<Prisma.StravaTokenNullableScalarRelationFilter, Prisma.StravaTokenWhereInput> | null
   activities?: Prisma.ActivityListRelationFilter
   weeklyAggs?: Prisma.WeeklyAggregateListRelationFilter
   dailyFeedbacks?: Prisma.DailyFeedbackListRelationFilter
   goals?: Prisma.GoalListRelationFilter
-}, "id" | "stravaId">
+}, "id" | "email" | "stravaId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  stravaId?: Prisma.SortOrder
-  username?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
+  stravaId?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -259,16 +309,26 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  stravaId?: Prisma.IntWithAggregatesFilter<"User"> | number
-  username?: Prisma.StringWithAggregatesFilter<"User"> | string
+  email?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  stravaId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
@@ -278,9 +338,15 @@ export type UserCreateInput = {
 
 export type UserUncheckedCreateInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
@@ -290,9 +356,15 @@ export type UserUncheckedCreateInput = {
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
@@ -302,9 +374,15 @@ export type UserUpdateInput = {
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
@@ -314,30 +392,46 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -346,16 +440,24 @@ export type UserAvgOrderByAggregateInput = {
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   stravaId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -371,8 +473,16 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -381,6 +491,34 @@ export type IntFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
+  upsert?: Prisma.UserUpsertWithoutAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountsInput, Prisma.UserUpdateWithoutAccountsInput>, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+}
+
+export type UserCreateNestedOneWithoutPasswordResetTokensInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokensInput
+  upsert?: Prisma.UserUpsertWithoutPasswordResetTokensInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.UserUpdateWithoutPasswordResetTokensInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
 }
 
 export type UserCreateNestedOneWithoutStravaTokenInput = {
@@ -453,11 +591,185 @@ export type UserUpdateOneRequiredWithoutGoalsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutGoalsInput, Prisma.UserUpdateWithoutGoalsInput>, Prisma.UserUncheckedUpdateWithoutGoalsInput>
 }
 
+export type UserCreateWithoutAccountsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
+  dailyFeedbacks?: Prisma.DailyFeedbackCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAccountsInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUncheckedCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+}
+
+export type UserUpsertWithoutAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountsInput, Prisma.UserUncheckedUpdateWithoutAccountsInput>
+}
+
+export type UserUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPasswordResetTokensInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
+  activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
+  weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
+  dailyFeedbacks?: Prisma.DailyFeedbackCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
+  id?: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
+  activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
+  weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUncheckedCreateNestedManyWithoutUserInput
+  goals?: Prisma.GoalUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+}
+
+export type UserUpsertWithoutPasswordResetTokensInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokensInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPasswordResetTokensInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokensInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
+}
+
+export type UserUpdateWithoutPasswordResetTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
+  activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
+  weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
+  activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
+  weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
+  dailyFeedbacks?: Prisma.DailyFeedbackUncheckedUpdateManyWithoutUserNestedInput
+  goals?: Prisma.GoalUncheckedUpdateManyWithoutUserNestedInput
+}
+
 export type UserCreateWithoutStravaTokenInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackCreateNestedManyWithoutUserInput
@@ -466,9 +778,15 @@ export type UserCreateWithoutStravaTokenInput = {
 
 export type UserUncheckedCreateWithoutStravaTokenInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedCreateNestedManyWithoutUserInput
@@ -493,9 +811,15 @@ export type UserUpdateToOneWithWhereWithoutStravaTokenInput = {
 
 export type UserUpdateWithoutStravaTokenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUpdateManyWithoutUserNestedInput
@@ -504,9 +828,15 @@ export type UserUpdateWithoutStravaTokenInput = {
 
 export type UserUncheckedUpdateWithoutStravaTokenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedUpdateManyWithoutUserNestedInput
@@ -515,9 +845,15 @@ export type UserUncheckedUpdateWithoutStravaTokenInput = {
 
 export type UserCreateWithoutActivitiesInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackCreateNestedManyWithoutUserInput
@@ -526,9 +862,15 @@ export type UserCreateWithoutActivitiesInput = {
 
 export type UserUncheckedCreateWithoutActivitiesInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedCreateNestedManyWithoutUserInput
@@ -553,9 +895,15 @@ export type UserUpdateToOneWithWhereWithoutActivitiesInput = {
 
 export type UserUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUpdateManyWithoutUserNestedInput
@@ -564,9 +912,15 @@ export type UserUpdateWithoutActivitiesInput = {
 
 export type UserUncheckedUpdateWithoutActivitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedUpdateManyWithoutUserNestedInput
@@ -575,9 +929,15 @@ export type UserUncheckedUpdateWithoutActivitiesInput = {
 
 export type UserCreateWithoutWeeklyAggsInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackCreateNestedManyWithoutUserInput
@@ -586,9 +946,15 @@ export type UserCreateWithoutWeeklyAggsInput = {
 
 export type UserUncheckedCreateWithoutWeeklyAggsInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedCreateNestedManyWithoutUserInput
@@ -613,9 +979,15 @@ export type UserUpdateToOneWithWhereWithoutWeeklyAggsInput = {
 
 export type UserUpdateWithoutWeeklyAggsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUpdateManyWithoutUserNestedInput
@@ -624,9 +996,15 @@ export type UserUpdateWithoutWeeklyAggsInput = {
 
 export type UserUncheckedUpdateWithoutWeeklyAggsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   dailyFeedbacks?: Prisma.DailyFeedbackUncheckedUpdateManyWithoutUserNestedInput
@@ -635,9 +1013,15 @@ export type UserUncheckedUpdateWithoutWeeklyAggsInput = {
 
 export type UserCreateWithoutDailyFeedbacksInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
@@ -646,9 +1030,15 @@ export type UserCreateWithoutDailyFeedbacksInput = {
 
 export type UserUncheckedCreateWithoutDailyFeedbacksInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
@@ -673,9 +1063,15 @@ export type UserUpdateToOneWithWhereWithoutDailyFeedbacksInput = {
 
 export type UserUpdateWithoutDailyFeedbacksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
@@ -684,9 +1080,15 @@ export type UserUpdateWithoutDailyFeedbacksInput = {
 
 export type UserUncheckedUpdateWithoutDailyFeedbacksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
@@ -695,9 +1097,15 @@ export type UserUncheckedUpdateWithoutDailyFeedbacksInput = {
 
 export type UserCreateWithoutGoalsInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateCreateNestedManyWithoutUserInput
@@ -706,9 +1114,15 @@ export type UserCreateWithoutGoalsInput = {
 
 export type UserUncheckedCreateWithoutGoalsInput = {
   id?: string
-  stravaId: number
-  username: string
+  email?: string | null
+  name?: string | null
+  emailVerified?: boolean
+  stravaId?: number | null
+  username?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   stravaToken?: Prisma.StravaTokenUncheckedCreateNestedOneWithoutUserInput
   activities?: Prisma.ActivityUncheckedCreateNestedManyWithoutUserInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedCreateNestedManyWithoutUserInput
@@ -733,9 +1147,15 @@ export type UserUpdateToOneWithWhereWithoutGoalsInput = {
 
 export type UserUpdateWithoutGoalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUpdateManyWithoutUserNestedInput
@@ -744,9 +1164,15 @@ export type UserUpdateWithoutGoalsInput = {
 
 export type UserUncheckedUpdateWithoutGoalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  stravaId?: Prisma.IntFieldUpdateOperationsInput | number
-  username?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stravaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   stravaToken?: Prisma.StravaTokenUncheckedUpdateOneWithoutUserNestedInput
   activities?: Prisma.ActivityUncheckedUpdateManyWithoutUserNestedInput
   weeklyAggs?: Prisma.WeeklyAggregateUncheckedUpdateManyWithoutUserNestedInput
@@ -759,6 +1185,8 @@ export type UserUncheckedUpdateWithoutGoalsInput = {
  */
 
 export type UserCountOutputType = {
+  accounts: number
+  passwordResetTokens: number
   activities: number
   weeklyAggs: number
   dailyFeedbacks: number
@@ -766,6 +1194,8 @@ export type UserCountOutputType = {
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
   activities?: boolean | UserCountOutputTypeCountActivitiesArgs
   weeklyAggs?: boolean | UserCountOutputTypeCountWeeklyAggsArgs
   dailyFeedbacks?: boolean | UserCountOutputTypeCountDailyFeedbacksArgs
@@ -780,6 +1210,20 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasswordResetTokenWhereInput
 }
 
 /**
@@ -813,9 +1257,15 @@ export type UserCountOutputTypeCountGoalsArgs<ExtArgs extends runtime.Types.Exte
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  email?: boolean
+  name?: boolean
+  emailVerified?: boolean
   stravaId?: boolean
   username?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   stravaToken?: boolean | Prisma.User$stravaTokenArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
   weeklyAggs?: boolean | Prisma.User$weeklyAggsArgs<ExtArgs>
@@ -826,27 +1276,41 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  email?: boolean
+  name?: boolean
+  emailVerified?: boolean
   stravaId?: boolean
   username?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  email?: boolean
+  name?: boolean
+  emailVerified?: boolean
   stravaId?: boolean
   username?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
+  email?: boolean
+  name?: boolean
+  emailVerified?: boolean
   stravaId?: boolean
   username?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "stravaId" | "username" | "createdAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "emailVerified" | "stravaId" | "username" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   stravaToken?: boolean | Prisma.User$stravaTokenArgs<ExtArgs>
   activities?: boolean | Prisma.User$activitiesArgs<ExtArgs>
   weeklyAggs?: boolean | Prisma.User$weeklyAggsArgs<ExtArgs>
@@ -860,6 +1324,8 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    accounts: Prisma.$AccountPayload<ExtArgs>[]
+    passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     stravaToken: Prisma.$StravaTokenPayload<ExtArgs> | null
     activities: Prisma.$ActivityPayload<ExtArgs>[]
     weeklyAggs: Prisma.$WeeklyAggregatePayload<ExtArgs>[]
@@ -868,9 +1334,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    stravaId: number
-    username: string
+    email: string | null
+    name: string | null
+    emailVerified: boolean
+    stravaId: number | null
+    username: string | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1265,6 +1735,8 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stravaToken<T extends Prisma.User$stravaTokenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$stravaTokenArgs<ExtArgs>>): Prisma.Prisma__StravaTokenClient<runtime.Types.Result.GetResult<Prisma.$StravaTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   activities<T extends Prisma.User$activitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   weeklyAggs<T extends Prisma.User$weeklyAggsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$weeklyAggsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeeklyAggregatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1300,9 +1772,13 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
+  readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly name: Prisma.FieldRef<"User", 'String'>
+  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly stravaId: Prisma.FieldRef<"User", 'Int'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
@@ -1693,6 +2169,54 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.accounts
+ */
+export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  where?: Prisma.AccountWhereInput
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
+  cursor?: Prisma.AccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.passwordResetTokens
+ */
+export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetToken
+   */
+  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetToken
+   */
+  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetTokenWhereInput
+  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
 }
 
 /**

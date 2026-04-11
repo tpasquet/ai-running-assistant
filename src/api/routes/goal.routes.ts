@@ -20,15 +20,14 @@ const CreateBodySchema = z.object({
 export async function goalRoutes(app: FastifyInstance) {
   const service = new GoalService(prisma);
 
-  app.post("/goals", async (request, reply) => {
-    await request.authenticate();
+  app.post("/goals", { preHandler: [app.authenticate] }, async (request, reply) => {
 
     const parsed = CreateBodySchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.code(400).send({ error: "Invalid body", details: parsed.error.flatten() });
     }
 
-    const userId = request.user.userId;
+    const userId = request.user.sub;
     const { targetDate, ...rest } = parsed.data;
 
     try {
@@ -46,9 +45,8 @@ export async function goalRoutes(app: FastifyInstance) {
     }
   });
 
-  app.get("/goals", async (request, reply) => {
-    await request.authenticate();
-    const goals = await service.listActive(request.user.userId);
+  app.get("/goals", { preHandler: [app.authenticate] }, async (request, reply) => {
+    const goals = await service.listActive(request.user.sub);
     return reply.send({ items: goals });
   });
 }

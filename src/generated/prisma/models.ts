@@ -9,6 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Account'
+export type * from './models/PasswordResetToken'
 export type * from './models/StravaToken'
 export type * from './models/Activity'
 export type * from './models/WeeklyAggregate'
